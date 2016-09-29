@@ -21,7 +21,7 @@ func GraphWalk(graph *graphviz.Graph, parent, node *Node) {
 		map[string]string{
 			//"label": node.Expression.String(),
 			"label": fmt.Sprintf(
-				"{<f0>%s|<f1>%s\n\n\n}",
+				"{<f0>%s|<f1>%s}",
 				node.Expression.String(),
 				func() string {
 					list := make([]string, len(node.Payload))
