@@ -1,0 +1,54 @@
+/* Lexical elements */
+
+_digit : '0'-'9' ;
+
+_letter : 'a'-'z' | 'A'-'Z' ;
+
+_alphanumeric : _letter | _digit ;
+
+variable : _letter { _alphanumeric | '.' | '_' } ;
+
+int_lit : _digit {_digit} ;
+
+float_lit : _digit { '.' | _digit } ;
+
+string_lit : '"' {.} '"' | '\'' {.} '\'';
+
+!whitespace : ' ' | '\t' | '\n' | '\r' ;
+
+<<import ( "github.com/sjhitchner/go-decision/expression" )>>
+
+/*
+Expression : Expression "and" Expression      << expression.NewLogicalAnd($0, $2) >>
+     | Expression "or" Expression             << expression.NewLogicalOr($0, $2) >>
+     | "not" Expression                       << expression.NewNegation($1) >>
+     | Term
+     ;
+    | "(" Expression ")"                   << expression.NewClause($1) >>
+    | empty                                << expression.NewNull() >>
+    | "undefined"                          << expression.NewNull() >>
+    | "null"                               << expression.NewNull() >>
+*/
+
+Term : Factor ">" Factor                      << expression.NewComparisonGreaterThan($0, $2) >>
+       | Factor ">=" Factor                   << expression.NewComparisonGreaterThanEquals($0, $2) >>
+       | Factor "<" Factor                    << expression.NewComparisonLessThan($0, $2) >>
+       | Factor "<=" Factor                   << expression.NewComparisonLessThanEquals($0, $2) >>
+       | Factor "=" Factor                    << expression.NewComparisonEquals($0, $2) >>
+       | Factor "==" Factor                   << expression.NewComparisonEquals($0, $2) >>
+       | Factor "!=" Factor                   << expression.NewComparisonNotEquals($0, $2) >>
+       | Factor "is" Factor                   << expression.NewComparisonIs($0, $2) >>
+       | Factor "is" "not" Factor             << expression.NewComparisonIsNot($0, $3) >>
+       | Factor "contains" Factor             << expression.NewComparisonContains($0, $2) >>
+       | Factor "matches" Factor              << expression.NewMatches($0, $2) >>
+       | Factor
+       ;
+
+Factor 
+    : variable                             << expression.NewResolver($0) >>
+    | string_lit                           << expression.NewLiteralString($0) >>
+    | int_lit                              << expression.NewLiteralInt($0) >>
+    | float_lit                            << expression.NewLiteralFloat($0) >>
+    | "true"                               << expression.NewLiteralBool(true) >>
+    | "false"                              << expression.NewLiteralBool(false) >>
+    ;
