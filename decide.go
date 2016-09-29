@@ -105,8 +105,29 @@ func addObject(node *Node, object Object, expressions []string) error {
 	return nil
 }
 
-func pruneTree(node *Node) {
+func pruneTree(node *Node) bool {
+	fmt.Println("PRUNE", node.Expression, len(node.Payload))
 
+	if node.True != nil {
+		if prune := pruneTree(node.True); prune {
+			node.True = nil
+		}
+	}
+
+	if node.False != nil {
+		if prune := pruneTree(node.False); prune {
+			node.False = nil
+		}
+	}
+
+	if node.True == nil && node.False == nil {
+		// Is Leaf
+		if len(node.Payload) == 0 {
+			return true
+		}
+	}
+
+	return false
 }
 
 func NewExpression(str string) (exp.Expression, error) {
