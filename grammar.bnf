@@ -16,7 +16,7 @@ string_lit : '"' {.} '"' | '\'' {.} '\'';
 
 !whitespace : ' ' | '\t' | '\n' | '\r' ;
 
-<<import ( "github.com/sjhitchner/go-decision/expression" )>>
+<<import ( "github.com/sjhitchner/go-decide/expression" )>>
 
 /*
 Expression : Expression "and" Expression      << expression.NewLogicalAnd($0, $2) >>

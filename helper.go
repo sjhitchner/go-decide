@@ -1,4 +1,4 @@
-package decisions
+package decide
 
 import (
 	"bytes"

@@ -1,9 +1,9 @@
-package decisions
+package decide
 
 import (
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/sjhitchner/go-decision/expression"
+	"github.com/sjhitchner/go-decide/expression"
 )
 
 // Generate syntax parser

@@ -3,7 +3,7 @@ package expression
 import (
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/sjhitchner/go-decision/token"
+	"github.com/sjhitchner/go-decide/token"
 	"reflect"
 	"regexp"
 	"strconv"

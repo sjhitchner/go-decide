@@ -1,4 +1,4 @@
-package decisions
+package decide
 
 import (
 	. "gopkg.in/check.v1"
