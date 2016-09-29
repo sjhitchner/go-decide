@@ -3,7 +3,7 @@ package decide
 import (
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/sjhitchner/go-decide/expression"
+	exp "github.com/sjhitchner/go-decide/expression"
 )
 
 // Generate syntax parser
@@ -31,13 +31,13 @@ func (t *evaluationLog) Add(objects ...Object) {
 
 // Decision Tree Node
 type Node struct {
-	Expression expression.Expression
+	Expression exp.Expression
 	Payload    []Object
 	True       *Node
 	False      *Node
 }
 
-func NewNode(expression expression.Expression) *Node {
+func NewNode(expression exp.Expression) *Node {
 	return &Node{
 		expression,
 		nil,
@@ -46,28 +46,26 @@ func NewNode(expression expression.Expression) *Node {
 	}
 }
 
-func (t Node) Evaluate(ctx Context, log EvaluationLog) error {
+func (t Node) Evaluate(ctx exp.Context, log EvaluationLog) error {
 
 	if t.Expression == nil {
 		return nil
 	}
 
-	/*
-		result, err := toBool(t.expression.Evaluate(ctx))
-		if err != nil {
-			return errors.Wrapf(err, "Failed to evaluate expression %v", t.expression)
-		}
+	result, err := toBool(t.Expression.Evaluate(ctx))
+	if err != nil {
+		return errors.Wrapf(err, "Failed to evaluate expression %v", t.Expression)
+	}
 
-		if result {
-			log.Add(t.Payload...)
-		}
+	if result {
+		log.Add(t.Payload...)
+	}
 
-		if result && t.True != nil {
-			return t.True.Evaluate(ctx, log)
-		} else if t.False != nil {
-			return t.False.Evaluate(ctx, log)
-		}
-	*/
+	if result && t.True != nil {
+		return t.True.Evaluate(ctx, log)
+	} else if t.False != nil {
+		return t.False.Evaluate(ctx, log)
+	}
 
 	return nil
 }

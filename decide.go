@@ -78,6 +78,8 @@ func addExpression(node *Node, expression exp.Expression) *Node {
 	return node
 }
 
+// addObject
+// Adding objects to the tree where they match expressions
 func addObject(node *Node, object Object, expressions []string) error {
 
 	expression, err := NewExpression(expressions[0])
@@ -105,6 +107,8 @@ func addObject(node *Node, object Object, expressions []string) error {
 	return nil
 }
 
+// pruneTree
+// Prune nodes that have no children and nothing in the payload
 func pruneTree(node *Node) bool {
 	fmt.Println("PRUNE", node.Expression, len(node.Payload))
 
@@ -142,7 +146,7 @@ func NewExpression(str string) (exp.Expression, error) {
 	return expression.(exp.Expression), nil
 }
 
-func (t Tree) Evaluate(ctx Context) (EvaluationLog, error) {
+func (t Tree) Evaluate(ctx exp.Context) (EvaluationLog, error) {
 	log := NewEvaluationLog()
 	if err := t.root.Evaluate(ctx, log); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
@@ -157,27 +161,3 @@ func (t Tree) String() string {
 func (t Tree) Graph(w io.Writer) error {
 	return Graph(w, t.root)
 }
-
-/*
-
-func FindExpression(node *Node, expression expression.Expression) *Node {
-	if node == nil {
-		return nil
-	}
-
-	if node.Expression == expression {
-		return node
-	}
-
-	result := FindExpression(node.True, expression)
-	if result == nil {
-		result = FindExpression(node.False, expression)
-	}
-
-	return result
-}
-
-func AddObject(tree *Node, expresions []expression.Expression, object Object) error {
-	return nil
-}
-*/
