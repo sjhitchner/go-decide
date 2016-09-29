@@ -1,6 +1,7 @@
 package decide
 
 import (
+	//"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
 	exp "github.com/sjhitchner/go-decide/expression"
@@ -11,23 +12,32 @@ import (
 
 type Object string
 
+/*
 type EvaluationLog interface {
 	Add(objects ...Object)
 }
+*/
 
-type evaluationLog struct {
-	objects []Object
+/*
+type EvaluationLog struct {
+	objects []Object `json:"objects"`
 }
 
-func NewEvaluationLog() EvaluationLog {
-	return &evaluationLog{
+func NewEvaluationLog() *EvaluationLog {
+	return &EvaluationLog{
 		make([]Object, 0, 10),
 	}
 }
 
-func (t *evaluationLog) Add(objects ...Object) {
+func (t *EvaluationLog) Add(objects ...Object) {
 	t.objects = append(t.objects, objects...)
 }
+
+func (t EvaluationLog) String() string {
+	b, _ := json.MarshalIndent(t, "", "  ")
+	return string(b)
+}
+*/
 
 // Decision Tree Node
 type Node struct {
@@ -46,19 +56,23 @@ func NewNode(expression exp.Expression) *Node {
 	}
 }
 
-func (t Node) Evaluate(ctx exp.Context, log EvaluationLog) error {
-
+/*
 	if t.Expression == nil {
 		return nil
 	}
+*/
+func (t Node) Evaluate(ctx exp.Context, log *[]Object) error {
+	fmt.Println("EVAL", t.Expression, ctx) //, result, log)
 
 	result, err := toBool(t.Expression.Evaluate(ctx))
+	fmt.Println("EVAL Result:", result)
 	if err != nil {
 		return errors.Wrapf(err, "Failed to evaluate expression %v", t.Expression)
 	}
 
 	if result {
-		log.Add(t.Payload...)
+		//log.Add(t.Payload...)
+		*log = append(*log, t.Payload...)
 	}
 
 	if result && t.True != nil {
@@ -73,6 +87,10 @@ func (t Node) Evaluate(ctx exp.Context, log EvaluationLog) error {
 func toBool(result interface{}, err error) (bool, error) {
 	if err != nil {
 		return false, err
+	}
+
+	if result == nil {
+		return false, nil
 	}
 
 	b, ok := result.(bool)

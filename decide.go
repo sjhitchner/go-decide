@@ -146,11 +146,12 @@ func NewExpression(str string) (exp.Expression, error) {
 	return expression.(exp.Expression), nil
 }
 
-func (t Tree) Evaluate(ctx exp.Context) (EvaluationLog, error) {
-	log := NewEvaluationLog()
-	if err := t.root.Evaluate(ctx, log); err != nil {
+func (t Tree) Evaluate(ctx exp.Context) ([]Object, error) {
+	log := make([]Object, 0, 10) //NewEvaluationLog()
+	if err := t.root.Evaluate(ctx, &log); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
+	fmt.Println("LOG", log)
 	return log, nil
 }
 
