@@ -9,6 +9,7 @@ import (
 	"testing"
 	//"time"
 	//"github.com/pkg/errors"
+	exp "github.com/sjhitchner/go-decide/expression"
 )
 
 func Test(t *testing.T) {
@@ -27,6 +28,7 @@ func (s *DecisionSuite) Test(c *C) {
 		},
 		"object02": []string{
 			`platform = 'iOS'`,
+			`device.gender != "male"`,
 		},
 		"object03": []string{
 			`platform = 'iOS'`,
@@ -50,7 +52,7 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	fmt.Println(tree)
+	//fmt.Println(tree)
 
 	f, err := os.Create("decision.dot")
 	if err != nil {
@@ -58,6 +60,24 @@ func (s *DecisionSuite) Test(c *C) {
 	}
 	defer f.Close()
 	tree.Graph(f)
+
+	context := exp.Context{
+		"geo_code": "US",
+		"platform": "iOS",
+	}
+	/*
+		context := exp.Context{
+			"geo_code": "US",
+			"platform": "Android",
+		}
+	*/
+
+	log, err := tree.Evaluate(context)
+	if err != nil {
+		c.Fatal(err)
+	}
+
+	fmt.Println(log)
 }
 
 /*

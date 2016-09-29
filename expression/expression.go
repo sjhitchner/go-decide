@@ -63,6 +63,10 @@ func (t ComparisonExpression) Evaluate(ctx Context) (interface{}, error) {
 		return nil, errors.Wrapf(err, "Right comparison evaluate failed")
 	}
 
+	if left == nil || right == nil {
+		return nil, nil
+	}
+
 	switch t.Comparison {
 	case GreaterThan:
 		return OperationGreaterThan(left, right)

@@ -151,7 +151,6 @@ func (t Tree) Evaluate(ctx exp.Context) ([]Object, error) {
 	if err := t.root.Evaluate(ctx, &log); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
-	fmt.Println("LOG", log)
 	return log, nil
 }
 
