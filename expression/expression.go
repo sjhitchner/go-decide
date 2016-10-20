@@ -22,9 +22,12 @@ const (
 	Contains
 )
 
-type Context map[string]interface{}
 type Logical int
 type Comparison int
+
+type Context interface {
+	Get(key string) (interface{}, bool)
+}
 
 type Expression interface {
 	Evaluate(Context) (interface{}, error)
@@ -231,7 +234,7 @@ type ResolverExpression struct {
 
 func (t ResolverExpression) Evaluate(ctx Context) (interface{}, error) {
 	// TODO arbitrarily deep context maps
-	ai, ok := ctx[t.key]
+	ai, ok := ctx.Get(t.key)
 	if !ok {
 		// TODO need to return nil is key doesn't exist
 		// return false, errors.Wrapf(ContextMissingKeyError, "key %s doesn't exist", t.key)

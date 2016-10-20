@@ -9,13 +9,11 @@ import (
 	"io"
 )
 
-type Context map[string]interface{}
-
 type Tree struct {
 	root *Node
 }
 
-func NewTree(objects map[Object][]string) (*Tree, error) {
+func NewTree(objects map[string][]string) (*Tree, error) {
 
 	sorter := NewFrequencySorter()
 
@@ -37,7 +35,7 @@ func NewTree(objects map[Object][]string) (*Tree, error) {
 
 	for object, list := range objects {
 		sorter.Sort(list)
-		if err := addObject(root, object, list); err != nil {
+		if err := addPayload(root, object, list); err != nil {
 			return nil, err
 		}
 	}
@@ -45,6 +43,22 @@ func NewTree(objects map[Object][]string) (*Tree, error) {
 	pruneTree(root)
 
 	return &Tree{root}, nil
+}
+
+func (t Tree) Evaluate(ctx exp.Context) ([]string, error) {
+	var list []string
+	if err := t.root.Evaluate(ctx, &list); err != nil {
+		return nil, errors.Wrap(err, "Error evaluating tree")
+	}
+	return nil, nil
+}
+
+func (t Tree) String() string {
+	return t.root.String()
+}
+
+func (t Tree) Graph(w io.Writer) error {
+	return Graph(w, t.root)
 }
 
 // Build tree using sorted list of most common expressions
@@ -78,9 +92,9 @@ func addExpression(node *Node, expression exp.Expression) *Node {
 	return node
 }
 
-// addObject
+// addPayload
 // Adding objects to the tree where they match expressions
-func addObject(node *Node, object Object, expressions []string) error {
+func addPayload(node *Node, object string, expressions []string) error {
 
 	expression, err := NewExpression(expressions[0])
 	if err != nil {
@@ -94,14 +108,14 @@ func addObject(node *Node, object Object, expressions []string) error {
 			return nil
 		}
 
-		return addObject(node.True, object, expressions[1:])
+		return addPayload(node.True, object, expressions[1:])
 
 	} else {
-		err := addObject(node.True, object, expressions)
+		err := addPayload(node.True, object, expressions)
 		if err != nil {
 			return err
 		}
-		return addObject(node.False, object, expressions)
+		return addPayload(node.False, object, expressions)
 	}
 
 	return nil
@@ -144,20 +158,4 @@ func NewExpression(str string) (exp.Expression, error) {
 	}
 
 	return expression.(exp.Expression), nil
-}
-
-func (t Tree) Evaluate(ctx exp.Context) ([]Object, error) {
-	log := make([]Object, 0, 10) //NewEvaluationLog()
-	if err := t.root.Evaluate(ctx, &log); err != nil {
-		return nil, errors.Wrap(err, "Error evaluating tree")
-	}
-	return log, nil
-}
-
-func (t Tree) String() string {
-	return t.root.String()
-}
-
-func (t Tree) Graph(w io.Writer) error {
-	return Graph(w, t.root)
 }

@@ -29,7 +29,7 @@ func (t ExpressionPairList) Swap(i, j int) {
 	t[i], t[j] = t[j], t[i]
 }
 
-func NewExpressionPairList(objects map[Object][]string) ExpressionPairList {
+func NewExpressionPairList(objects map[string][]string) ExpressionPairList {
 	expression := make(map[string]int)
 
 	for _, expressions := range objects {

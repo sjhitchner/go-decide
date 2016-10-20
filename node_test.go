@@ -9,7 +9,7 @@ import (
 	"testing"
 	//"time"
 	//"github.com/pkg/errors"
-	exp "github.com/sjhitchner/go-decide/expression"
+	//exp "github.com/sjhitchner/go-decide/expression"
 )
 
 func Test(t *testing.T) {
@@ -20,9 +20,16 @@ type DecisionSuite struct{}
 
 var _ = Suite(&DecisionSuite{})
 
+type TestContext map[string]interface{}
+
+func (t TestContext) Get(key string) (interface{}, bool) {
+	result, ok := t[key]
+	return result, ok
+}
+
 func (s *DecisionSuite) Test(c *C) {
 
-	objects := map[Object][]string{
+	objects := map[string][]string{
 		"object01": []string{
 			`geo_code matches '^(.*,)?(US)$'`,
 		},
@@ -61,16 +68,11 @@ func (s *DecisionSuite) Test(c *C) {
 	defer f.Close()
 	tree.Graph(f)
 
-	context := exp.Context{
-		"geo_code": "US",
-		"platform": "iOS",
+	context := TestContext{
+		"geo_code":         "US",
+		"platform":         "iOS",
+		"device.age_group": "60",
 	}
-	/*
-		context := exp.Context{
-			"geo_code": "US",
-			"platform": "Android",
-		}
-	*/
 
 	log, err := tree.Evaluate(context)
 	if err != nil {
