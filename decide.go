@@ -1,7 +1,6 @@
 package decide
 
 import (
-	// "fmt"
 	"github.com/pkg/errors"
 	exp "github.com/sjhitchner/go-decide/expression"
 	"github.com/sjhitchner/go-decide/lexer"
@@ -124,7 +123,6 @@ func addPayload(node *Node, object string, expressions []string) error {
 // pruneTree
 // Prune nodes that have no children and nothing in the payload
 func pruneTree(node *Node) bool {
-	// fmt.Println("PRUNE", node.Expression, len(node.Payload))
 
 	if node.True != nil {
 		if prune := pruneTree(node.True); prune {

@@ -129,12 +129,12 @@ func (t LogicalExpression) Evaluate(ctx Context) (interface{}, error) {
 
 	left, err := t.Left.Evaluate(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err, "Left comparison evaluate failed")
+		return nil, errors.Wrap(err, "Left logical evaluate failed")
 	}
 
 	right, err := t.Right.Evaluate(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err, "Right comparison evaluate failed")
+		return nil, errors.Wrap(err, "Right logical evaluate failed")
 	}
 
 	if left == nil || right == nil {
@@ -146,6 +146,8 @@ func (t LogicalExpression) Evaluate(ctx Context) (interface{}, error) {
 	switch t.Logical {
 	case Or:
 		return OperationOr(left, right)
+	default:
+		return nil, LogicalError
 	}
 
 	return nil, nil
