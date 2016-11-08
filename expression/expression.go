@@ -150,11 +150,25 @@ func (t LogicalExpression) Evaluate(ctx Context) (interface{}, error) {
 		return nil, LogicalError
 	}
 
-	return nil, nil
+	return nil, LogicalError
 }
 
 func (t LogicalExpression) String() string {
-	return fmt.Sprintf("%s %s %s", t.Left, t.Logical, t.Right)
+	var l, r string
+
+	if t.Left != nil {
+		l = t.Left.String()
+	} else {
+		l = "empty"
+	}
+
+	if t.Right != nil {
+		r = t.Right.String()
+	} else {
+		r = "empty"
+	}
+
+	return fmt.Sprintf("(%s %s %s)", l, t.Logical, r)
 }
 
 // Regex Expression
@@ -204,7 +218,7 @@ type NegationExpression struct {
 func (t NegationExpression) Evaluate(ctx Context) (interface{}, error) {
 	a, err := t.Expression.Evaluate(ctx)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Negation expression evaluation failed")
 	}
 	return OperationNot(a)
 }
