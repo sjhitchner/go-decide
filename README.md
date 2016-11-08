@@ -1,5 +1,5 @@
-# go-decide
-Decision Tree
+# go-decide [![Build Status](https://travis-ci.org/sjhitchner/go-decide.svg?branch=master)](https://travis-ci.org/sjhitchner/go-decide)
+Decision Tree 
 
 
 ## Visualizing Tree
