@@ -29,7 +29,7 @@ func NewComparisonLessThanEquals(a, b Attrib) (*ComparisonExpression, error) {
 }
 
 func NewComparisonEquals(a, b Attrib) (*ComparisonExpression, error) {
-	return &ComparisonExpression{a.(Expression), b.(Expression), Equals}, nil
+	return &ComparisonExpression{a.(Expression), b.(Expression), IsEquals}, nil
 }
 
 func NewComparisonNotEquals(a, b Attrib) (*ComparisonExpression, error) {
@@ -99,6 +99,10 @@ func NewLiteralString(a Attrib) (*LiteralExpression, error) {
 	astring = strings.TrimSuffix(astring, `'`)
 	astring = strings.TrimSuffix(astring, `"`)
 	return &LiteralExpression{astring}, nil
+}
+
+func NewLogicalOr(a, b Attrib) (*LogicalExpression, error) {
+	return &LogicalExpression{a.(Expression), b.(Expression), Or}, nil
 }
 
 func NewResolver(a Attrib) (*ResolverExpression, error) {

@@ -1,7 +1,7 @@
 package decide
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/pkg/errors"
 	exp "github.com/sjhitchner/go-decide/expression"
 	"github.com/sjhitchner/go-decide/lexer"
@@ -50,7 +50,7 @@ func (t Tree) Evaluate(ctx exp.Context) ([]string, error) {
 	if err := t.root.Evaluate(ctx, &list); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
-	return nil, nil
+	return list, nil
 }
 
 func (t Tree) String() string {
@@ -124,7 +124,7 @@ func addPayload(node *Node, object string, expressions []string) error {
 // pruneTree
 // Prune nodes that have no children and nothing in the payload
 func pruneTree(node *Node) bool {
-	fmt.Println("PRUNE", node.Expression, len(node.Payload))
+	// fmt.Println("PRUNE", node.Expression, len(node.Payload))
 
 	if node.True != nil {
 		if prune := pruneTree(node.True); prune {

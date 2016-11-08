@@ -15,8 +15,8 @@ import (
 
 const(
 	NoState = -1
-	NumStates = 49
-	NumSymbols = 55
+	NumStates = 51
+	NumSymbols = 57
 )
 
 type Lexer struct {
@@ -54,7 +54,7 @@ func (this *Lexer) Scan() (tok *token.Token) {
 		tok.Pos.Offset, tok.Pos.Line, tok.Pos.Column = this.pos, this.line, this.column
 		return
 	}
-	start, end := this.pos, 0
+	start, startLine, startColumn, end := this.pos, this.line, this.column, 0
 	tok.Type = token.INVALID
 	state, rune1, size := 0, rune(-1), 0
 	for state != -1 {
@@ -66,17 +66,6 @@ func (this *Lexer) Scan() (tok *token.Token) {
 		} else {
 			rune1, size = utf8.DecodeRune(this.src[this.pos:])
 			this.pos += size
-		}
-		switch rune1 {
-		case '\n':
-			this.line++
-			this.column = 1
-		case '\r':
-			this.column = 1
-		case '\t':
-			this.column += 4
-		default:
-			this.column++
 		}
 
 	
@@ -103,6 +92,19 @@ func (this *Lexer) Scan() (tok *token.Token) {
 	
 
 		if state != -1 {
+
+			switch rune1 {
+			case '\n':
+				this.line++
+				this.column = 1
+			case '\r':
+				this.column = 1
+			case '\t':
+				this.column += 4
+			default:
+				this.column++
+			}
+
 			switch {
 			case ActTab[state].Accept != -1:
 				tok.Type = ActTab[state].Accept
@@ -110,7 +112,7 @@ func (this *Lexer) Scan() (tok *token.Token) {
 				end = this.pos
 			case ActTab[state].Ignore != "":
 				// fmt.Printf("\t Ignore(%s)\n", string(act))
-				start = this.pos
+				start, startLine, startColumn = this.pos, this.line, this.column
 				state = 0
 				if start >= len(this.src) {
 					tok.Type = token.EOF
@@ -129,9 +131,12 @@ func (this *Lexer) Scan() (tok *token.Token) {
 	} else {
 		tok.Lit = []byte{}
 	}
-	tok.Pos.Offset = start
-	tok.Pos.Column = this.column
-	tok.Pos.Line = this.line
+	tok.Pos.Offset, tok.Pos.Line ,tok.Pos.Column = start, startLine, startColumn
+
+	
+	// fmt.Printf("Token at %s: %s \"%s\"\n", tok.String(), token.TokMap.Id(tok.Type), tok.Lit)
+	
+
 	return
 }
 
@@ -148,53 +153,55 @@ Lexer symbols:
 4: '"'
 5: '''
 6: '''
-7: '>'
-8: '>'
-9: '='
-10: '<'
-11: '<'
-12: '='
-13: '='
+7: 'o'
+8: 'r'
+9: '>'
+10: '>'
+11: '='
+12: '<'
+13: '<'
 14: '='
 15: '='
-16: '!'
+16: '='
 17: '='
-18: 'i'
-19: 's'
-20: 'n'
-21: 'o'
-22: 't'
-23: 'c'
-24: 'o'
-25: 'n'
-26: 't'
-27: 'a'
-28: 'i'
-29: 'n'
-30: 's'
-31: 'm'
-32: 'a'
-33: 't'
-34: 'c'
-35: 'h'
-36: 'e'
-37: 's'
-38: 't'
-39: 'r'
-40: 'u'
-41: 'e'
-42: 'f'
-43: 'a'
-44: 'l'
-45: 's'
-46: 'e'
-47: ' '
-48: '\t'
-49: '\n'
-50: '\r'
-51: '0'-'9'
-52: 'a'-'z'
-53: 'A'-'Z'
-54: .
+18: '!'
+19: '='
+20: 'i'
+21: 's'
+22: 'n'
+23: 'o'
+24: 't'
+25: 'c'
+26: 'o'
+27: 'n'
+28: 't'
+29: 'a'
+30: 'i'
+31: 'n'
+32: 's'
+33: 'm'
+34: 'a'
+35: 't'
+36: 'c'
+37: 'h'
+38: 'e'
+39: 's'
+40: 't'
+41: 'r'
+42: 'u'
+43: 'e'
+44: 'f'
+45: 'a'
+46: 'l'
+47: 's'
+48: 'e'
+49: ' '
+50: '\t'
+51: '\n'
+52: '\r'
+53: '0'-'9'
+54: 'a'-'z'
+55: 'A'-'Z'
+56: .
 
 */

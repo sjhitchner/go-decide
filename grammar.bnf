@@ -30,6 +30,10 @@ Expression : Expression "and" Expression      << expression.NewLogicalAnd($0, $2
     | "null"                               << expression.NewNull() >>
 */
 
+Expression : Term "or" Term                 << expression.NewLogicalOr($0, $2) >>
+           | Term
+           ;
+
 Term : Factor ">" Factor                      << expression.NewComparisonGreaterThan($0, $2) >>
        | Factor ">=" Factor                   << expression.NewComparisonGreaterThanEquals($0, $2) >>
        | Factor "<" Factor                    << expression.NewComparisonLessThan($0, $2) >>
@@ -44,7 +48,7 @@ Term : Factor ">" Factor                      << expression.NewComparisonGreater
        | Factor
        ;
 
-Factor 
+Factor
     : variable                             << expression.NewResolver($0) >>
     | string_lit                           << expression.NewLiteralString($0) >>
     | int_lit                              << expression.NewLiteralInt($0) >>
