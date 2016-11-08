@@ -4,12 +4,12 @@ import (
 	. "gopkg.in/check.v1"
 	"math/rand"
 	//"strings"
-	"fmt"
+	// "fmt"
 	"os"
 	"testing"
 	//"time"
 	//"github.com/pkg/errors"
-	//exp "github.com/sjhitchner/go-decide/expression"
+	exp "github.com/sjhitchner/go-decide/expression"
 )
 
 func Test(t *testing.T) {
@@ -79,7 +79,7 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	fmt.Println(log)
+	c.Log(log)
 }
 
 /*
@@ -191,47 +191,66 @@ func (s DecisionSuite) TestFrequencySorter(c *C) {
 	}
 }
 
-/*
-	list1 := []string{
-		`platform = 'iOS'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`platform = 'Android'`,
-		`device.age_group != "13-17"`,
-	}
-	list2 := []string{
-		`geo_code matches '^(.*,)?(US)$'`,
-		`device.device_type matches '(?i)(Phone)'`,
-		`geo_code matches '^(.*,)?(GB)$'`,
-		`device.age_group != "13-17"`,
-	}
-	list3 := []string{
-		`app.genre matches '^(Productivity)$'`,
-		`device.device_type matches '(?i)(Tablet)'`,
-		`platform = 'iOS'`,
-		`platform = 'Android'`,
-	}
-	list4 := []string{
-		`platform = 'Android'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`device.age_group != "13-17"`,
-	}
-	list5 := []string{
-		`device.age_group != "13-17"`,
+func (s *DecisionSuite) TestLogicalEvaluation(c *C) {
+	ctx := testContext{}
+
+	// Test true or true = true
+	expA, err := NewExpression("5 > 3")
+	c.Assert(err, IsNil)
+	expB, err := NewExpression("5 != 6")
+	c.Assert(err, IsNil)
+
+	exp := &exp.LogicalExpression{
+		Left:    expA,
+		Right:   expB,
+		Logical: exp.Or,
 	}
 
+	result, err := exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, true)
 
-	c.Assert(list6b, DeepEquals, list6Expected)
-	c.Assert(list6c, DeepEquals, list6Expected)
+	// Test false or true = true
+	expA, err = NewExpression("5 < 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 != 6")
+	c.Assert(err, IsNil)
 
-	fmt.Println(sorter)
-	sorter.Sort(list1)
-	sorter.Sort(list2)
-	sorter.Sort(list3)
-	sorter.Sort(list4)
-	sorter.Sort(list5)
-	fmt.Println(list6Expected)
-	fmt.Println(list6a)
-	fmt.Println(list6b)
-	fmt.Println(list6c)
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, true)
+
+	// Test true or false = true
+	expA, err = NewExpression("5 > 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 == 6")
+	c.Assert(err, IsNil)
+
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, true)
+
+	// Test false or false = false
+	expA, err = NewExpression("5 < 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 == 6")
+	c.Assert(err, IsNil)
+
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, false)
+
 }
-*/
+
+type testContext struct {
+}
+
+func (t testContext) Get(key string) (interface{}, bool) {
+	return true, true
+}

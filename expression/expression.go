@@ -15,7 +15,7 @@ const (
 	GreaterThanEquals
 	LessThan
 	LessThanEquals
-	Equals
+	IsEquals
 	NotEquals
 	Is
 	IsNot
@@ -79,7 +79,7 @@ func (t ComparisonExpression) Evaluate(ctx Context) (interface{}, error) {
 		return OperationLessThan(left, right)
 	case LessThanEquals:
 		return OperationLessThanEquals(left, right)
-	case Equals:
+	case IsEquals:
 		return OperationEquals(left, right)
 	case NotEquals:
 		return OperationNotEquals(left, right)
@@ -110,53 +110,68 @@ func (t ComparisonExpression) String() string {
 	return fmt.Sprintf("(%s %s %s)", l, t.Comparison, r)
 }
 
-/* Logical Node
-
-type LogicalNode struct {
-	Left    Node
-	Right   Node
+// Logical expressions
+// Contains expressions such as a Or b, a And b
+type LogicalExpression struct {
+	Left    Expression
+	Right   Expression
 	Logical Logical
-	Objects []Object
 }
 
-func (t LogicalNode) Evaluate(ctx Context) (interface{}, error) {
+func (t LogicalExpression) Evaluate(ctx Context) (interface{}, error) {
 	if t.Left == nil {
 		return nil, errors.New("Left node is nil")
 	}
+
 	if t.Right == nil {
 		return nil, errors.New("Right node is nil")
 	}
 
-	left, err := t.Left.Evaluate(tracer, ctx)
+	left, err := t.Left.Evaluate(ctx)
 	if err != nil {
-		return nil, errors.Wrapf(err, "Left logical evaluate failed")
+		return nil, errors.Wrap(err, "Left logical evaluate failed")
 	}
 
-	right, err := t.Right.Evaluate(tracer, ctx)
+	right, err := t.Right.Evaluate(ctx)
 	if err != nil {
-		return nil, errors.Wrapf(err, "Right logical evaluate failed")
+		return nil, errors.Wrap(err, "Right logical evaluate failed")
 	}
 
-	var result bool
+	if left == nil || right == nil {
+		return nil, nil
+
+	}
+
+	// Making this a switch statement so that we can add more operations later
 	switch t.Logical {
-	case And:
-		result, err = OperationAnd(left, right)
 	case Or:
-		result, err = OperationOr(left, right)
+		return OperationOr(left, right)
 	default:
-		result, err = false, LogicalError
+		return nil, LogicalError
 	}
 
-	return evaluateResult(tracer, result, err, t.Objects)
+	return nil, LogicalError
 }
 
-func (t LogicalNode) String() string {
-	return nodeToString(t.Left, t.Right, t.Logical)
+func (t LogicalExpression) String() string {
+	var l, r string
+
+	if t.Left != nil {
+		l = t.Left.String()
+	} else {
+		l = "empty"
+	}
+
+	if t.Right != nil {
+		r = t.Right.String()
+	} else {
+		r = "empty"
+	}
+
+	return fmt.Sprintf("(%s %s %s)", l, t.Logical, r)
 }
-*/
 
 // Regex Expression
-
 type RegexExpression struct {
 	Node  Expression
 	regex *regexp.Regexp
@@ -203,7 +218,7 @@ type NegationExpression struct {
 func (t NegationExpression) Evaluate(ctx Context) (interface{}, error) {
 	a, err := t.Expression.Evaluate(ctx)
 	if err != nil {
-		return nil, nil
+		return nil, errors.Wrap(err, "Negation expression evaluation failed")
 	}
 	return OperationNot(a)
 }
@@ -276,7 +291,7 @@ func (t Comparison) String() string {
 		return "<"
 	case LessThanEquals:
 		return "<="
-	case Equals:
+	case IsEquals:
 		return "=="
 	case NotEquals:
 		return "!="
