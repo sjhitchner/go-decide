@@ -105,6 +105,10 @@ func NewLogicalOr(a, b Attrib) (*LogicalExpression, error) {
 	return &LogicalExpression{a.(Expression), b.(Expression), Or}, nil
 }
 
+func NewNegation(a Attrib) (*NegationExpression, error) {
+	return &NegationExpression{a.(Expression)}, nil
+}
+
 func NewResolver(a Attrib) (*ResolverExpression, error) {
 	key := StringValue(a)
 	return &ResolverExpression{key}, nil

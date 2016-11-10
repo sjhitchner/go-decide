@@ -15,7 +15,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		1, // Expression
 		2, // Term
-		3, // Factor
+		4, // Factor
 		
 
 	},
@@ -41,8 +41,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		-1, // Term
-		-1, // Factor
+		12, // Term
+		13, // Factor
 		
 
 	},
@@ -104,8 +104,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		21, // Term
-		22, // Factor
+		-1, // Term
+		-1, // Factor
 		
 
 	},
@@ -113,8 +113,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		-1, // Term
-		29, // Factor
+		30, // Term
+		13, // Factor
 		
 
 	},
@@ -123,7 +123,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		36, // Factor
+		-1, // Factor
 		
 
 	},
@@ -132,7 +132,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		37, // Factor
+		-1, // Factor
 		
 
 	},
@@ -141,7 +141,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		38, // Factor
+		-1, // Factor
 		
 
 	},
@@ -150,7 +150,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		39, // Factor
+		-1, // Factor
 		
 
 	},
@@ -159,7 +159,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		40, // Factor
+		-1, // Factor
 		
 
 	},
@@ -168,7 +168,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		41, // Factor
+		-1, // Factor
 		
 
 	},
@@ -177,7 +177,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		42, // Factor
+		-1, // Factor
 		
 
 	},
@@ -186,7 +186,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		44, // Factor
+		-1, // Factor
 		
 
 	},
@@ -195,7 +195,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		45, // Factor
+		41, // Factor
 		
 
 	},
@@ -204,7 +204,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		48, // Factor
 		
 
 	},
@@ -213,7 +213,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		49, // Factor
 		
 
 	},
@@ -222,7 +222,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		50, // Factor
 		
 
 	},
@@ -231,7 +231,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		51, // Factor
 		
 
 	},
@@ -240,7 +240,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		52, // Factor
 		
 
 	},
@@ -249,7 +249,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		53, // Factor
 		
 
 	},
@@ -258,7 +258,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		55, // Factor
 		
 
 	},
@@ -267,7 +267,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		56, // Factor
 		
 
 	},
@@ -276,7 +276,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		57, // Factor
 		
 
 	},
@@ -294,7 +294,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		58, // Factor
 		
 
 	},
@@ -303,7 +303,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		65, // Factor
 		
 
 	},
@@ -312,7 +312,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		66, // Factor
 		
 
 	},
@@ -321,7 +321,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		67, // Factor
 		
 
 	},
@@ -330,7 +330,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		68, // Factor
 		
 
 	},
@@ -339,7 +339,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		69, // Factor
 		
 
 	},
@@ -348,7 +348,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		70, // Factor
 		
 
 	},
@@ -357,7 +357,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		72, // Factor
 		
 
 	},
@@ -366,7 +366,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		73, // Factor
 		
 
 	},
@@ -375,7 +375,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		74, // Factor
 		
 
 	},
@@ -402,7 +402,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		56, // Factor
+		-1, // Factor
 		
 
 	},
@@ -429,7 +429,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		57, // Factor
+		-1, // Factor
 		
 
 	},
@@ -438,7 +438,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		64, // Factor
+		-1, // Factor
 		
 
 	},
@@ -447,7 +447,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		65, // Factor
+		-1, // Factor
 		
 
 	},
@@ -456,7 +456,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		66, // Factor
+		-1, // Factor
 		
 
 	},
@@ -465,7 +465,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		67, // Factor
+		-1, // Factor
 		
 
 	},
@@ -474,7 +474,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		68, // Factor
+		-1, // Factor
 		
 
 	},
@@ -483,7 +483,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		69, // Factor
+		-1, // Factor
 		
 
 	},
@@ -492,7 +492,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		70, // Factor
+		-1, // Factor
 		
 
 	},
@@ -501,7 +501,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		72, // Factor
+		75, // Factor
 		
 
 	},
@@ -510,7 +510,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		73, // Factor
+		-1, // Factor
 		
 
 	},
@@ -654,7 +654,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		74, // Factor
+		76, // Factor
 		
 
 	},
@@ -677,6 +677,24 @@ var gotoTab = gotoTable{
 
 	},
 	gotoRow{ // S74
+		
+		-1, // S'
+		-1, // Expression
+		-1, // Term
+		-1, // Factor
+		
+
+	},
+	gotoRow{ // S75
+		
+		-1, // S'
+		-1, // Expression
+		-1, // Term
+		-1, // Factor
+		
+
+	},
+	gotoRow{ // S76
 		
 		-1, // S'
 		-1, // Expression
