@@ -245,7 +245,29 @@ func (s *DecisionSuite) TestLogicalEvaluation(c *C) {
 	result, err = exp.Evaluate(ctx)
 	c.Assert(err, IsNil)
 	c.Assert(result, Equals, false)
+}
 
+func (s *DecisionSuite) TestNegationEvaluation(c *C) {
+	ctx := testContext{}
+
+	expA, err := NewExpression("5 > 3")
+	c.Assert(err, IsNil)
+	c.Assert(expA, NotNil)
+
+	exp := &exp.NegationExpression{
+		Expression: expA,
+	}
+	result, err := exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, false)
+
+	expA, err = NewExpression("5 < 3")
+	c.Assert(err, IsNil)
+	c.Assert(expA, NotNil)
+	exp.Expression = expA
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, true)
 }
 
 type testContext struct {
