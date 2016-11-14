@@ -10,7 +10,23 @@ var IncompatibleTypeError = errors.New("Incompatible Types Error")
 
 // Operation
 
-func OperationAnd(ai interface{}, bi interface{}) (bool, error) {
+type ComparisonOperations interface {
+	OperationAnd(ai interface{}, bi interface{}) (bool, error)
+	OperationOr(ai interface{}, bi interface{}) (bool, error)
+	OperationNot(ai interface{}) (interface{}, error)
+	OperationGreaterThan(ai interface{}, bi interface{}) (bool, error)
+	OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error)
+	OperationLessThan(ai interface{}, bi interface{}) (bool, error)
+	OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error)
+	OperationEquals(ai interface{}, bi interface{}) (bool, error)
+	OperationNotEquals(ai interface{}, bi interface{}) (bool, error)
+	OperationIs(ai interface{}, bi interface{}) (bool, error)
+	OperationContains(ai interface{}, bi interface{}) (bool, error)
+}
+
+type ReflectionComparisionOperations struct{}
+
+func (t ReflectionComparisonOperations) OperationAnd(ai interface{}, bi interface{}) (bool, error) {
 	a, oka := ai.(bool)
 	b, okb := bi.(bool)
 
@@ -21,7 +37,7 @@ func OperationAnd(ai interface{}, bi interface{}) (bool, error) {
 	return false, errors.Wrapf(IncompatibleTypeError, "AND %v incompatible with %v", a, b)
 }
 
-func OperationOr(ai interface{}, bi interface{}) (bool, error) {
+func (t ReflectionComparisonOperations) OperationOr(ai interface{}, bi interface{}) (bool, error) {
 	a, oka := ai.(bool)
 	b, okb := bi.(bool)
 
@@ -32,7 +48,7 @@ func OperationOr(ai interface{}, bi interface{}) (bool, error) {
 	return false, errors.Wrapf(IncompatibleTypeError, "OR %v incompatible with %v", a, b)
 }
 
-func OperationNot(ai interface{}) (interface{}, error) {
+func (t ReflectionComparisonOperations) OperationNot(ai interface{}) (interface{}, error) {
 	a, oka := ai.(bool)
 	if oka {
 		return !a, nil
@@ -41,7 +57,56 @@ func OperationNot(ai interface{}) (interface{}, error) {
 	return false, errors.Wrapf(IncompatibleTypeError, "NOT %v invalid type", a)
 }
 
-func OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
+func (t ReflectionComparisonOperations) OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationEquals(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
+}
+func (t ReflectionComparisonOperations) OperationIs(ai interface{}, bi interface{}) (bool, error) {}
+func (t ReflectionComparisonOperations) OperationContains(ai interface{}, bi interface{}) (bool, error) {
+}
+
+type TypeCheckComparisonOperations struct{}
+
+func (t TypeCheckComparisonOperations) OperationAnd(ai interface{}, bi interface{}) (bool, error) {
+	a, oka := ai.(bool)
+	b, okb := bi.(bool)
+
+	if oka && okb {
+		return a && b, nil
+	}
+
+	return false, errors.Wrapf(IncompatibleTypeError, "AND %v incompatible with %v", a, b)
+}
+
+func (t TypeCheckComparisonOperations) OperationOr(ai interface{}, bi interface{}) (bool, error) {
+	a, oka := ai.(bool)
+	b, okb := bi.(bool)
+
+	if oka && okb {
+		return a || b, nil
+	}
+
+	return false, errors.Wrapf(IncompatibleTypeError, "OR %v incompatible with %v", a, b)
+}
+
+func (t TypeCheckComparisonOperations) OperationNot(ai interface{}) (interface{}, error) {
+	a, oka := ai.(bool)
+	if oka {
+		return !a, nil
+	}
+
+	return false, errors.Wrapf(IncompatibleTypeError, "NOT %v invalid type", a)
+}
+
+func (t TypeCheckComparisonOperations) OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -58,7 +123,7 @@ func OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -75,7 +140,7 @@ func OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -92,7 +157,7 @@ func OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -109,7 +174,7 @@ func OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationEquals(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationEquals(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -126,7 +191,7 @@ func OperationEquals(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -143,7 +208,7 @@ func OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func OperationIs(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationIs(ai interface{}, bi interface{}) (bool, error) {
 	result, err := ComparisonOperation(
 		ai,
 		bi,
@@ -192,7 +257,7 @@ func ComparisonOperation(ai interface{}, bi interface{}, f func(a, b float64) bo
 	}
 }
 
-func OperationContains(ai interface{}, bi interface{}) (bool, error) {
+func (t TypeCheckComparisonOperations) OperationContains(ai interface{}, bi interface{}) (bool, error) {
 	switch a := ai.(type) {
 	case string:
 		b, ok := bi.(string)
