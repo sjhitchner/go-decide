@@ -43,7 +43,7 @@ func (t Node) Evaluate(ctx exp.Context, list *[]string) error {
 		return t.True.Evaluate(ctx, list)
 	} else if t.False != nil {
 		return t.False.Evaluate(ctx, list)
-	} else {
+	} else if result {
 		*list = append(*list, t.Payload...)
 	}
 
