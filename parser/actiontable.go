@@ -18,6 +18,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			shift(3),		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -45,6 +46,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			accept(true),		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -70,8 +72,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(3),		/* $, reduce: Expression */
+			reduce(4),		/* $, reduce: Expression */
 			shift(11),		/* or */
+			shift(12),		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -99,6 +102,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -110,12 +114,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(14),		/* variable */
-			shift(15),		/* string_lit */
-			shift(16),		/* int_lit */
-			shift(17),		/* float_lit */
-			shift(18),		/* true */
-			shift(19),		/* false */
+			shift(15),		/* variable */
+			shift(16),		/* string_lit */
+			shift(17),		/* int_lit */
+			shift(18),		/* float_lit */
+			shift(19),		/* true */
+			shift(20),		/* false */
 			
 		},
 
@@ -124,19 +128,20 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(15),		/* $, reduce: Term */
-			reduce(15),		/* or, reduce: Term */
+			reduce(16),		/* $, reduce: Term */
+			reduce(16),		/* or, reduce: Term */
+			reduce(16),		/* and, reduce: Term */
 			nil,		/* not */
-			shift(20),		/* > */
-			shift(21),		/* >= */
-			shift(22),		/* < */
-			shift(23),		/* <= */
-			shift(24),		/* = */
-			shift(25),		/* == */
-			shift(26),		/* != */
-			shift(27),		/* is */
-			shift(28),		/* contains */
-			shift(29),		/* matches */
+			shift(21),		/* > */
+			shift(22),		/* >= */
+			shift(23),		/* < */
+			shift(24),		/* <= */
+			shift(25),		/* = */
+			shift(26),		/* == */
+			shift(27),		/* != */
+			shift(28),		/* is */
+			shift(29),		/* contains */
+			shift(30),		/* matches */
 			nil,		/* variable */
 			nil,		/* string_lit */
 			nil,		/* int_lit */
@@ -151,35 +156,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(16),		/* $, reduce: Factor */
-			reduce(16),		/* or, reduce: Factor */
-			nil,		/* not */
-			reduce(16),		/* >, reduce: Factor */
-			reduce(16),		/* >=, reduce: Factor */
-			reduce(16),		/* <, reduce: Factor */
-			reduce(16),		/* <=, reduce: Factor */
-			reduce(16),		/* =, reduce: Factor */
-			reduce(16),		/* ==, reduce: Factor */
-			reduce(16),		/* !=, reduce: Factor */
-			reduce(16),		/* is, reduce: Factor */
-			reduce(16),		/* contains, reduce: Factor */
-			reduce(16),		/* matches, reduce: Factor */
-			nil,		/* variable */
-			nil,		/* string_lit */
-			nil,		/* int_lit */
-			nil,		/* float_lit */
-			nil,		/* true */
-			nil,		/* false */
-			
-		},
-
-	},
-	actionRow{ // S6
-				canRecover: false,
-		actions: [numSymbols]action{
-			nil,		/* INVALID */
 			reduce(17),		/* $, reduce: Factor */
 			reduce(17),		/* or, reduce: Factor */
+			reduce(17),		/* and, reduce: Factor */
 			nil,		/* not */
 			reduce(17),		/* >, reduce: Factor */
 			reduce(17),		/* >=, reduce: Factor */
@@ -201,12 +180,13 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S7
+	actionRow{ // S6
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
 			reduce(18),		/* $, reduce: Factor */
 			reduce(18),		/* or, reduce: Factor */
+			reduce(18),		/* and, reduce: Factor */
 			nil,		/* not */
 			reduce(18),		/* >, reduce: Factor */
 			reduce(18),		/* >=, reduce: Factor */
@@ -228,12 +208,13 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S8
+	actionRow{ // S7
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
 			reduce(19),		/* $, reduce: Factor */
 			reduce(19),		/* or, reduce: Factor */
+			reduce(19),		/* and, reduce: Factor */
 			nil,		/* not */
 			reduce(19),		/* >, reduce: Factor */
 			reduce(19),		/* >=, reduce: Factor */
@@ -255,12 +236,13 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S9
+	actionRow{ // S8
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
 			reduce(20),		/* $, reduce: Factor */
 			reduce(20),		/* or, reduce: Factor */
+			reduce(20),		/* and, reduce: Factor */
 			nil,		/* not */
 			reduce(20),		/* >, reduce: Factor */
 			reduce(20),		/* >=, reduce: Factor */
@@ -282,12 +264,13 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S10
+	actionRow{ // S9
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
 			reduce(21),		/* $, reduce: Factor */
 			reduce(21),		/* or, reduce: Factor */
+			reduce(21),		/* and, reduce: Factor */
 			nil,		/* not */
 			reduce(21),		/* >, reduce: Factor */
 			reduce(21),		/* >=, reduce: Factor */
@@ -309,50 +292,24 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S11
+	actionRow{ // S10
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			nil,		/* $ */
-			nil,		/* or */
+			reduce(22),		/* $, reduce: Factor */
+			reduce(22),		/* or, reduce: Factor */
+			reduce(22),		/* and, reduce: Factor */
 			nil,		/* not */
-			nil,		/* > */
-			nil,		/* >= */
-			nil,		/* < */
-			nil,		/* <= */
-			nil,		/* = */
-			nil,		/* == */
-			nil,		/* != */
-			nil,		/* is */
-			nil,		/* contains */
-			nil,		/* matches */
-			shift(14),		/* variable */
-			shift(15),		/* string_lit */
-			shift(16),		/* int_lit */
-			shift(17),		/* float_lit */
-			shift(18),		/* true */
-			shift(19),		/* false */
-			
-		},
-
-	},
-	actionRow{ // S12
-				canRecover: false,
-		actions: [numSymbols]action{
-			nil,		/* INVALID */
-			reduce(2),		/* $, reduce: Expression */
-			nil,		/* or */
-			nil,		/* not */
-			nil,		/* > */
-			nil,		/* >= */
-			nil,		/* < */
-			nil,		/* <= */
-			nil,		/* = */
-			nil,		/* == */
-			nil,		/* != */
-			nil,		/* is */
-			nil,		/* contains */
-			nil,		/* matches */
+			reduce(22),		/* >, reduce: Factor */
+			reduce(22),		/* >=, reduce: Factor */
+			reduce(22),		/* <, reduce: Factor */
+			reduce(22),		/* <=, reduce: Factor */
+			reduce(22),		/* =, reduce: Factor */
+			reduce(22),		/* ==, reduce: Factor */
+			reduce(22),		/* !=, reduce: Factor */
+			reduce(22),		/* is, reduce: Factor */
+			reduce(22),		/* contains, reduce: Factor */
+			reduce(22),		/* matches, reduce: Factor */
 			nil,		/* variable */
 			nil,		/* string_lit */
 			nil,		/* int_lit */
@@ -363,23 +320,80 @@ var actionTab = actionTable{
 		},
 
 	},
+	actionRow{ // S11
+				canRecover: false,
+		actions: [numSymbols]action{
+			nil,		/* INVALID */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
+			nil,		/* not */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
+			shift(15),		/* variable */
+			shift(16),		/* string_lit */
+			shift(17),		/* int_lit */
+			shift(18),		/* float_lit */
+			shift(19),		/* true */
+			shift(20),		/* false */
+			
+		},
+
+	},
+	actionRow{ // S12
+				canRecover: false,
+		actions: [numSymbols]action{
+			nil,		/* INVALID */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
+			nil,		/* not */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
+			shift(15),		/* variable */
+			shift(16),		/* string_lit */
+			shift(17),		/* int_lit */
+			shift(18),		/* float_lit */
+			shift(19),		/* true */
+			shift(20),		/* false */
+			
+		},
+
+	},
 	actionRow{ // S13
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(15),		/* $, reduce: Term */
+			reduce(3),		/* $, reduce: Expression */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
-			shift(31),		/* > */
-			shift(32),		/* >= */
-			shift(33),		/* < */
-			shift(34),		/* <= */
-			shift(35),		/* = */
-			shift(36),		/* == */
-			shift(37),		/* != */
-			shift(38),		/* is */
-			shift(39),		/* contains */
-			shift(40),		/* matches */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
 			nil,		/* variable */
 			nil,		/* string_lit */
 			nil,		/* int_lit */
@@ -394,19 +408,20 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(16),		/* $, reduce: Factor */
+			reduce(16),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
-			reduce(16),		/* >, reduce: Factor */
-			reduce(16),		/* >=, reduce: Factor */
-			reduce(16),		/* <, reduce: Factor */
-			reduce(16),		/* <=, reduce: Factor */
-			reduce(16),		/* =, reduce: Factor */
-			reduce(16),		/* ==, reduce: Factor */
-			reduce(16),		/* !=, reduce: Factor */
-			reduce(16),		/* is, reduce: Factor */
-			reduce(16),		/* contains, reduce: Factor */
-			reduce(16),		/* matches, reduce: Factor */
+			shift(33),		/* > */
+			shift(34),		/* >= */
+			shift(35),		/* < */
+			shift(36),		/* <= */
+			shift(37),		/* = */
+			shift(38),		/* == */
+			shift(39),		/* != */
+			shift(40),		/* is */
+			shift(41),		/* contains */
+			shift(42),		/* matches */
 			nil,		/* variable */
 			nil,		/* string_lit */
 			nil,		/* int_lit */
@@ -423,6 +438,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(17),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			reduce(17),		/* >, reduce: Factor */
 			reduce(17),		/* >=, reduce: Factor */
@@ -450,6 +466,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(18),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			reduce(18),		/* >, reduce: Factor */
 			reduce(18),		/* >=, reduce: Factor */
@@ -477,6 +494,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(19),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			reduce(19),		/* >, reduce: Factor */
 			reduce(19),		/* >=, reduce: Factor */
@@ -504,6 +522,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(20),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			reduce(20),		/* >, reduce: Factor */
 			reduce(20),		/* >=, reduce: Factor */
@@ -531,6 +550,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(21),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			reduce(21),		/* >, reduce: Factor */
 			reduce(21),		/* >=, reduce: Factor */
@@ -556,25 +576,26 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			nil,		/* $ */
+			reduce(22),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
-			nil,		/* > */
-			nil,		/* >= */
-			nil,		/* < */
-			nil,		/* <= */
-			nil,		/* = */
-			nil,		/* == */
-			nil,		/* != */
-			nil,		/* is */
-			nil,		/* contains */
-			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			reduce(22),		/* >, reduce: Factor */
+			reduce(22),		/* >=, reduce: Factor */
+			reduce(22),		/* <, reduce: Factor */
+			reduce(22),		/* <=, reduce: Factor */
+			reduce(22),		/* =, reduce: Factor */
+			reduce(22),		/* ==, reduce: Factor */
+			reduce(22),		/* !=, reduce: Factor */
+			reduce(22),		/* is, reduce: Factor */
+			reduce(22),		/* contains, reduce: Factor */
+			reduce(22),		/* matches, reduce: Factor */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
 			
 		},
 
@@ -585,6 +606,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -596,12 +618,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -612,6 +634,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -623,12 +646,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -639,6 +662,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -650,12 +674,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -666,6 +690,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -677,12 +702,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -693,6 +718,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -704,12 +730,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -720,6 +746,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -731,12 +758,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -747,7 +774,8 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
-			shift(54),		/* not */
+			nil,		/* and */
+			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
 			nil,		/* < */
@@ -758,12 +786,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -774,7 +802,8 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
-			nil,		/* not */
+			nil,		/* and */
+			shift(56),		/* not */
 			nil,		/* > */
 			nil,		/* >= */
 			nil,		/* < */
@@ -785,12 +814,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -801,6 +830,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -812,12 +842,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -826,8 +856,37 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
+			nil,		/* not */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
+			
+		},
+
+	},
+	actionRow{ // S31
+				canRecover: false,
+		actions: [numSymbols]action{
+			nil,		/* INVALID */
 			reduce(1),		/* $, reduce: Expression */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -849,39 +908,13 @@ var actionTab = actionTable{
 		},
 
 	},
-	actionRow{ // S31
-				canRecover: false,
-		actions: [numSymbols]action{
-			nil,		/* INVALID */
-			nil,		/* $ */
-			nil,		/* or */
-			nil,		/* not */
-			nil,		/* > */
-			nil,		/* >= */
-			nil,		/* < */
-			nil,		/* <= */
-			nil,		/* = */
-			nil,		/* == */
-			nil,		/* != */
-			nil,		/* is */
-			nil,		/* contains */
-			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
-			
-		},
-
-	},
 	actionRow{ // S32
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			nil,		/* $ */
+			reduce(2),		/* $, reduce: Expression */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -893,12 +926,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
 			
 		},
 
@@ -909,6 +942,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -920,12 +954,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -936,6 +970,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -947,12 +982,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -963,6 +998,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -974,12 +1010,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -990,6 +1026,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1001,12 +1038,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1017,6 +1054,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1028,12 +1066,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1044,7 +1082,8 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
-			shift(71),		/* not */
+			nil,		/* and */
+			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
 			nil,		/* < */
@@ -1055,12 +1094,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1071,6 +1110,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1082,12 +1122,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1098,7 +1138,8 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			nil,		/* $ */
 			nil,		/* or */
-			nil,		/* not */
+			nil,		/* and */
+			shift(73),		/* not */
 			nil,		/* > */
 			nil,		/* >= */
 			nil,		/* < */
@@ -1109,12 +1150,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1123,8 +1164,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(4),		/* $, reduce: Term */
-			reduce(4),		/* or, reduce: Term */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1136,12 +1178,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			nil,		/* variable */
-			nil,		/* string_lit */
-			nil,		/* int_lit */
-			nil,		/* float_lit */
-			nil,		/* true */
-			nil,		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1150,8 +1192,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(16),		/* $, reduce: Factor */
-			reduce(16),		/* or, reduce: Factor */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1163,12 +1206,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			nil,		/* variable */
-			nil,		/* string_lit */
-			nil,		/* int_lit */
-			nil,		/* float_lit */
-			nil,		/* true */
-			nil,		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -1177,8 +1220,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(17),		/* $, reduce: Factor */
-			reduce(17),		/* or, reduce: Factor */
+			reduce(5),		/* $, reduce: Term */
+			reduce(5),		/* or, reduce: Term */
+			reduce(5),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1204,8 +1248,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(18),		/* $, reduce: Factor */
-			reduce(18),		/* or, reduce: Factor */
+			reduce(17),		/* $, reduce: Factor */
+			reduce(17),		/* or, reduce: Factor */
+			reduce(17),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1231,8 +1276,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(19),		/* $, reduce: Factor */
-			reduce(19),		/* or, reduce: Factor */
+			reduce(18),		/* $, reduce: Factor */
+			reduce(18),		/* or, reduce: Factor */
+			reduce(18),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1258,8 +1304,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(20),		/* $, reduce: Factor */
-			reduce(20),		/* or, reduce: Factor */
+			reduce(19),		/* $, reduce: Factor */
+			reduce(19),		/* or, reduce: Factor */
+			reduce(19),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1285,8 +1332,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(21),		/* $, reduce: Factor */
-			reduce(21),		/* or, reduce: Factor */
+			reduce(20),		/* $, reduce: Factor */
+			reduce(20),		/* or, reduce: Factor */
+			reduce(20),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1312,8 +1360,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(5),		/* $, reduce: Term */
-			reduce(5),		/* or, reduce: Term */
+			reduce(21),		/* $, reduce: Factor */
+			reduce(21),		/* or, reduce: Factor */
+			reduce(21),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1339,8 +1388,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(6),		/* $, reduce: Term */
-			reduce(6),		/* or, reduce: Term */
+			reduce(22),		/* $, reduce: Factor */
+			reduce(22),		/* or, reduce: Factor */
+			reduce(22),		/* and, reduce: Factor */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1366,8 +1416,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(7),		/* $, reduce: Term */
-			reduce(7),		/* or, reduce: Term */
+			reduce(6),		/* $, reduce: Term */
+			reduce(6),		/* or, reduce: Term */
+			reduce(6),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1393,8 +1444,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(8),		/* $, reduce: Term */
-			reduce(8),		/* or, reduce: Term */
+			reduce(7),		/* $, reduce: Term */
+			reduce(7),		/* or, reduce: Term */
+			reduce(7),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1420,8 +1472,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(9),		/* $, reduce: Term */
-			reduce(9),		/* or, reduce: Term */
+			reduce(8),		/* $, reduce: Term */
+			reduce(8),		/* or, reduce: Term */
+			reduce(8),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1447,8 +1500,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(10),		/* $, reduce: Term */
-			reduce(10),		/* or, reduce: Term */
+			reduce(9),		/* $, reduce: Term */
+			reduce(9),		/* or, reduce: Term */
+			reduce(9),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1474,8 +1528,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			nil,		/* $ */
-			nil,		/* or */
+			reduce(10),		/* $, reduce: Term */
+			reduce(10),		/* or, reduce: Term */
+			reduce(10),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1487,12 +1542,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(42),		/* variable */
-			shift(43),		/* string_lit */
-			shift(44),		/* int_lit */
-			shift(45),		/* float_lit */
-			shift(46),		/* true */
-			shift(47),		/* false */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
 			
 		},
 
@@ -1503,6 +1558,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(11),		/* $, reduce: Term */
 			reduce(11),		/* or, reduce: Term */
+			reduce(11),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1528,8 +1584,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(13),		/* $, reduce: Term */
-			reduce(13),		/* or, reduce: Term */
+			nil,		/* $ */
+			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1541,12 +1598,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			nil,		/* variable */
-			nil,		/* string_lit */
-			nil,		/* int_lit */
-			nil,		/* float_lit */
-			nil,		/* true */
-			nil,		/* false */
+			shift(44),		/* variable */
+			shift(45),		/* string_lit */
+			shift(46),		/* int_lit */
+			shift(47),		/* float_lit */
+			shift(48),		/* true */
+			shift(49),		/* false */
 			
 		},
 
@@ -1555,8 +1612,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(14),		/* $, reduce: Term */
-			reduce(14),		/* or, reduce: Term */
+			reduce(12),		/* $, reduce: Term */
+			reduce(12),		/* or, reduce: Term */
+			reduce(12),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1582,8 +1640,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(4),		/* $, reduce: Term */
-			nil,		/* or */
+			reduce(14),		/* $, reduce: Term */
+			reduce(14),		/* or, reduce: Term */
+			reduce(14),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1609,8 +1668,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(16),		/* $, reduce: Factor */
-			nil,		/* or */
+			reduce(15),		/* $, reduce: Term */
+			reduce(15),		/* or, reduce: Term */
+			reduce(15),		/* and, reduce: Term */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1636,8 +1696,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(17),		/* $, reduce: Factor */
+			reduce(5),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1663,8 +1724,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(18),		/* $, reduce: Factor */
+			reduce(17),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1690,8 +1752,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(19),		/* $, reduce: Factor */
+			reduce(18),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1717,8 +1780,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(20),		/* $, reduce: Factor */
+			reduce(19),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1744,8 +1808,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(21),		/* $, reduce: Factor */
+			reduce(20),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1771,8 +1836,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(5),		/* $, reduce: Term */
+			reduce(21),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1798,8 +1864,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(6),		/* $, reduce: Term */
+			reduce(22),		/* $, reduce: Factor */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1825,8 +1892,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(7),		/* $, reduce: Term */
+			reduce(6),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1852,8 +1920,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(8),		/* $, reduce: Term */
+			reduce(7),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1879,8 +1948,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(9),		/* $, reduce: Term */
+			reduce(8),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1906,8 +1976,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(10),		/* $, reduce: Term */
+			reduce(9),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1933,8 +2004,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			nil,		/* $ */
+			reduce(10),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1946,12 +2018,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			shift(59),		/* variable */
-			shift(60),		/* string_lit */
-			shift(61),		/* int_lit */
-			shift(62),		/* float_lit */
-			shift(63),		/* true */
-			shift(64),		/* false */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
 			
 		},
 
@@ -1962,6 +2034,7 @@ var actionTab = actionTable{
 			nil,		/* INVALID */
 			reduce(11),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -1987,8 +2060,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(13),		/* $, reduce: Term */
+			nil,		/* $ */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -2000,12 +2074,12 @@ var actionTab = actionTable{
 			nil,		/* is */
 			nil,		/* contains */
 			nil,		/* matches */
-			nil,		/* variable */
-			nil,		/* string_lit */
-			nil,		/* int_lit */
-			nil,		/* float_lit */
-			nil,		/* true */
-			nil,		/* false */
+			shift(61),		/* variable */
+			shift(62),		/* string_lit */
+			shift(63),		/* int_lit */
+			shift(64),		/* float_lit */
+			shift(65),		/* true */
+			shift(66),		/* false */
 			
 		},
 
@@ -2014,8 +2088,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(14),		/* $, reduce: Term */
+			reduce(12),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -2041,8 +2116,9 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(12),		/* $, reduce: Term */
-			reduce(12),		/* or, reduce: Term */
+			reduce(14),		/* $, reduce: Term */
+			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */
@@ -2068,8 +2144,65 @@ var actionTab = actionTable{
 				canRecover: false,
 		actions: [numSymbols]action{
 			nil,		/* INVALID */
-			reduce(12),		/* $, reduce: Term */
+			reduce(15),		/* $, reduce: Term */
 			nil,		/* or */
+			nil,		/* and */
+			nil,		/* not */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
+			
+		},
+
+	},
+	actionRow{ // S77
+				canRecover: false,
+		actions: [numSymbols]action{
+			nil,		/* INVALID */
+			reduce(13),		/* $, reduce: Term */
+			reduce(13),		/* or, reduce: Term */
+			reduce(13),		/* and, reduce: Term */
+			nil,		/* not */
+			nil,		/* > */
+			nil,		/* >= */
+			nil,		/* < */
+			nil,		/* <= */
+			nil,		/* = */
+			nil,		/* == */
+			nil,		/* != */
+			nil,		/* is */
+			nil,		/* contains */
+			nil,		/* matches */
+			nil,		/* variable */
+			nil,		/* string_lit */
+			nil,		/* int_lit */
+			nil,		/* float_lit */
+			nil,		/* true */
+			nil,		/* false */
+			
+		},
+
+	},
+	actionRow{ // S78
+				canRecover: false,
+		actions: [numSymbols]action{
+			nil,		/* INVALID */
+			reduce(13),		/* $, reduce: Term */
+			nil,		/* or */
+			nil,		/* and */
 			nil,		/* not */
 			nil,		/* > */
 			nil,		/* >= */

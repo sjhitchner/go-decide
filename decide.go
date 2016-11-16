@@ -45,10 +45,16 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 }
 
 func (t Tree) Evaluate(ctx exp.Context) ([]string, error) {
-	var list []string
-	if err := t.root.Evaluate(ctx, &list); err != nil {
+	payloadMap := make(map[string]struct{})
+	if err := t.root.Evaluate(ctx, payloadMap); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
+
+	list := make([]string, 0, len(payloadMap))
+	for key := range payloadMap {
+		list = append(list, key)
+	}
+
 	return list, nil
 }
 
