@@ -146,6 +146,8 @@ func (t LogicalExpression) Evaluate(ctx Context) (interface{}, error) {
 	switch t.Logical {
 	case Or:
 		return OperationOr(left, right)
+	case And:
+		return OperationAnd(left, right)
 	default:
 		return nil, LogicalError
 	}

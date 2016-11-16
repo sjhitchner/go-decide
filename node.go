@@ -27,11 +27,6 @@ func NewNode(expression exp.Expression) *Node {
 	}
 }
 
-/*
-	if t.Expression == nil {
-		return nil
-	}
-*/
 func (t Node) Evaluate(ctx exp.Context, list *[]string) error {
 	result, err := toBool(t.Expression.Evaluate(ctx))
 	if err != nil {
@@ -48,6 +43,8 @@ func (t Node) Evaluate(ctx exp.Context, list *[]string) error {
 		return t.True.Evaluate(ctx, list)
 	} else if t.False != nil {
 		return t.False.Evaluate(ctx, list)
+	} else {
+		*list = append(*list, t.Payload...)
 	}
 
 	return nil

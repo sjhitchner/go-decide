@@ -191,7 +191,7 @@ func (s DecisionSuite) TestFrequencySorter(c *C) {
 	}
 }
 
-func (s *DecisionSuite) TestLogicalEvaluation(c *C) {
+func (s *DecisionSuite) TestLogicalOrEvaluation(c *C) {
 	ctx := testContext{}
 
 	// Test true or true = true
@@ -233,6 +233,62 @@ func (s *DecisionSuite) TestLogicalEvaluation(c *C) {
 	result, err = exp.Evaluate(ctx)
 	c.Assert(err, IsNil)
 	c.Assert(result, Equals, true)
+
+	// Test false or false = false
+	expA, err = NewExpression("5 < 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 == 6")
+	c.Assert(err, IsNil)
+
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, false)
+}
+
+func (s *DecisionSuite) TestLogicalAndEvaluation(c *C) {
+	ctx := testContext{}
+
+	// Test true or true = true
+	expA, err := NewExpression("5 > 3")
+	c.Assert(err, IsNil)
+	expB, err := NewExpression("5 != 6")
+	c.Assert(err, IsNil)
+
+	exp := &exp.LogicalExpression{
+		Left:    expA,
+		Right:   expB,
+		Logical: exp.And,
+	}
+
+	result, err := exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, true)
+
+	// Test false or true = true
+	expA, err = NewExpression("5 < 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 != 6")
+	c.Assert(err, IsNil)
+
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, false)
+
+	// Test true or false = true
+	expA, err = NewExpression("5 > 3")
+	c.Assert(err, IsNil)
+	expB, err = NewExpression("5 == 6")
+	c.Assert(err, IsNil)
+
+	exp.Left = expA
+	exp.Right = expB
+	result, err = exp.Evaluate(ctx)
+	c.Assert(err, IsNil)
+	c.Assert(result, Equals, false)
 
 	// Test false or false = false
 	expA, err = NewExpression("5 < 3")
