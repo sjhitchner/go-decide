@@ -35,9 +35,7 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}) error {
 
 	if result {
 		for _, payload := range t.Payload {
-			if _, ok := payloadMap[payload]; !ok {
-				payloadMap[payload] = struct{}{}
-			}
+			payloadMap[payload] = struct{}{}
 		}
 	}
 
@@ -49,9 +47,7 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}) error {
 		return t.False.Evaluate(ctx, payloadMap)
 	} else if result {
 		for _, payload := range t.Payload {
-			if _, ok := payloadMap[payload]; !ok {
-				payloadMap[payload] = struct{}{}
-			}
+			payloadMap[payload] = struct{}{}
 		}
 	}
 
