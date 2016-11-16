@@ -33,9 +33,9 @@ func (t Node) Evaluate(ctx exp.Context, list *[]string) error {
 		return errors.Wrapf(err, "failed to evaluate expression %v", t.Expression)
 	}
 
-	if result {
-		*list = append(*list, t.Payload...)
-	}
+	// if result {
+	// 	*list = append(*list, t.Payload...)
+	// }
 
 	log.Printf("EVAL %s Result: %v Payload: %v\n", t.Expression, result, list)
 
