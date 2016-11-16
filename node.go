@@ -27,24 +27,32 @@ func NewNode(expression exp.Expression) *Node {
 	}
 }
 
-func (t Node) Evaluate(ctx exp.Context, list *[]string) error {
+func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}) error {
 	result, err := toBool(t.Expression.Evaluate(ctx))
 	if err != nil {
 		return errors.Wrapf(err, "failed to evaluate expression %v", t.Expression)
 	}
 
-	// if result {
-	// 	*list = append(*list, t.Payload...)
-	// }
+	if result {
+		for _, payload := range t.Payload {
+			if _, ok := payloadMap[payload]; !ok {
+				payloadMap[payload] = struct{}{}
+			}
+		}
+	}
 
-	log.Printf("EVAL %s Result: %v Payload: %v\n", t.Expression, result, list)
+	log.Printf("EVAL %s Result: %v Payload: %v\n", t.Expression, result, payloadMap)
 
 	if result && t.True != nil {
-		return t.True.Evaluate(ctx, list)
+		return t.True.Evaluate(ctx, payloadMap)
 	} else if t.False != nil {
-		return t.False.Evaluate(ctx, list)
+		return t.False.Evaluate(ctx, payloadMap)
 	} else if result {
-		*list = append(*list, t.Payload...)
+		for _, payload := range t.Payload {
+			if _, ok := payloadMap[payload]; !ok {
+				payloadMap[payload] = struct{}{}
+			}
+		}
 	}
 
 	return nil
