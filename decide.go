@@ -23,25 +23,42 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 		}
 	}
 
-	root, err := buildTree(sorter.FrequencyList())
-	if err != nil {
-		return nil, err
-	}
+	var root *Node
+	var err error
+	for object, expressions := range objects {
+		sorter.Sort(expressions)
 
-	if root == nil {
-		return nil, errors.New("Unable to build tree, tree is empty")
-	}
-
-	for object, list := range objects {
-		sorter.Sort(list)
-		if err := addPayload(root, object, list); err != nil {
+		root, err = addNode(root, expressions, object)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	pruneTree(root)
-
 	return &Tree{root}, nil
+}
+
+func addNode(node *Node, expressions []string, object string) (*Node, error) {
+	expression, err := NewExpression(expressions[0])
+	if err != nil {
+		return nil, err
+	}
+
+	if node == nil {
+		node = NewNode(expression)
+	}
+
+	if node.Expression.String() == expression.String() {
+		if len(expressions) > 1 {
+			node.True, err = addNode(node.True, expressions[1:], object)
+			return node, err
+		}
+
+		node.Payload = append((*node).Payload, object)
+		return node, nil
+	}
+
+	node.False, err = addNode(node.False, expressions, object)
+	return node, err
 }
 
 func (t Tree) Evaluate(ctx exp.Context) ([]string, error) {
@@ -64,92 +81,6 @@ func (t Tree) String() string {
 
 func (t Tree) Graph(w io.Writer) error {
 	return Graph(w, t.root)
-}
-
-// Build tree using sorted list of most common expressions
-func buildTree(expressionList []string) (*Node, error) {
-	var root *Node
-
-	if len(expressionList) == 0 {
-		return nil, errors.New("Expression list is empty")
-	}
-
-	for _, str := range expressionList {
-		expression, err := NewExpression(str)
-		if err != nil {
-			return nil, errors.Wrapf(err, "Error creating expression for %s", str)
-		}
-		root = addExpression(root, expression)
-	}
-
-	return root, nil
-}
-
-// Add new expression to tree
-// Tree is balanced and is a deep as there are expressions
-func addExpression(node *Node, expression exp.Expression) *Node {
-	if node == nil {
-		return NewNode(expression)
-	}
-
-	node.True = addExpression(node.True, expression)
-	node.False = addExpression(node.False, expression)
-	return node
-}
-
-// addPayload
-// Adding objects to the tree where they match expressions
-func addPayload(node *Node, object string, expressions []string) error {
-
-	expression, err := NewExpression(expressions[0])
-	if err != nil {
-		return err
-	}
-
-	if node.Expression.String() == expression.String() {
-
-		if len(expressions) == 1 {
-			node.Payload = append(node.Payload, object)
-			return nil
-		}
-
-		return addPayload(node.True, object, expressions[1:])
-
-	} else {
-		err := addPayload(node.True, object, expressions)
-		if err != nil {
-			return err
-		}
-		return addPayload(node.False, object, expressions)
-	}
-
-	return nil
-}
-
-// pruneTree
-// Prune nodes that have no children and nothing in the payload
-func pruneTree(node *Node) bool {
-
-	if node.True != nil {
-		if prune := pruneTree(node.True); prune {
-			node.True = nil
-		}
-	}
-
-	if node.False != nil {
-		if prune := pruneTree(node.False); prune {
-			node.False = nil
-		}
-	}
-
-	if node.True == nil && node.False == nil {
-		// Is Leaf
-		if len(node.Payload) == 0 {
-			return true
-		}
-	}
-
-	return false
 }
 
 func NewExpression(str string) (exp.Expression, error) {
