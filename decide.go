@@ -1,7 +1,6 @@
 package decide
 
 import (
-	"fmt"
 	"github.com/pkg/errors"
 	exp "github.com/sjhitchner/go-decide/expression"
 	"github.com/sjhitchner/go-decide/lexer"
@@ -23,8 +22,6 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 			sorter.AddToFrequencies(expString)
 		}
 	}
-
-	fmt.Println("FL", sorter.FrequencyList())
 
 	var root *Node
 	var err error
