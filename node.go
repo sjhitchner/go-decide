@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	exp "github.com/sjhitchner/go-decide/expression"
-	"log"
 )
 
 // Generate syntax parser
@@ -27,7 +26,7 @@ func NewNode(expression exp.Expression) *Node {
 	}
 }
 
-func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}) error {
+func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}, trace Logger) error {
 	result, err := toBool(t.Expression.Evaluate(ctx))
 	if err != nil {
 		return errors.Wrapf(err, "failed to evaluate expression %v", t.Expression)
@@ -39,12 +38,14 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}) error {
 		}
 	}
 
-	log.Printf("EVAL %s Result: %v Payload: %v\n", t.Expression, result, payloadMap)
+	trace.Appendf("EVAL %s %v", t.Expression, t.Payload)
 
 	if result && t.True != nil {
-		return t.True.Evaluate(ctx, payloadMap)
+		return t.True.Evaluate(ctx, payloadMap, trace)
+
 	} else if t.False != nil {
-		return t.False.Evaluate(ctx, payloadMap)
+		return t.False.Evaluate(ctx, payloadMap, trace)
+
 	} else if result {
 		for _, payload := range t.Payload {
 			payloadMap[payload] = struct{}{}

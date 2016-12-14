@@ -8,6 +8,10 @@ import (
 	"io"
 )
 
+type Logger interface {
+	Appendf(f string, a ...interface{})
+}
+
 type Tree struct {
 	root *Node
 }
@@ -61,9 +65,9 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 	return node, err
 }
 
-func (t Tree) Evaluate(ctx exp.Context) ([]string, error) {
+func (t Tree) Evaluate(ctx exp.Context, logger Logger) ([]string, error) {
 	payloadMap := make(map[string]struct{})
-	if err := t.root.Evaluate(ctx, payloadMap); err != nil {
+	if err := t.root.Evaluate(ctx, payloadMap, logger); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
 

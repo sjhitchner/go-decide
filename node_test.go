@@ -1,15 +1,12 @@
 package decide
 
 import (
+	"fmt"
+	exp "github.com/sjhitchner/go-decide/expression"
 	. "gopkg.in/check.v1"
 	"math/rand"
-	//"strings"
-	// "fmt"
 	"os"
 	"testing"
-	//"time"
-	//"github.com/pkg/errors"
-	exp "github.com/sjhitchner/go-decide/expression"
 )
 
 func Test(t *testing.T) {
@@ -25,6 +22,14 @@ type TestContext map[string]interface{}
 func (t TestContext) Get(key string) (interface{}, bool) {
 	result, ok := t[key]
 	return result, ok
+}
+
+type TestLogger struct {
+	Trace []string
+}
+
+func (t *TestLogger) Appendf(f string, a ...interface{}) {
+	t.Trace = append(t.Trace, fmt.Sprintf(f, a...))
 }
 
 func (s *DecisionSuite) Test(c *C) {
@@ -74,10 +79,16 @@ func (s *DecisionSuite) Test(c *C) {
 		"device.age_group": "60",
 	}
 
-	log, err := tree.Evaluate(context)
+	logger := &TestLogger{
+		make([]string, 0, 10),
+	}
+
+	log, err := tree.Evaluate(context, logger)
 	if err != nil {
 		c.Fatal(err)
 	}
+
+	c.Assert(logger.Trace, HasLen, 4)
 
 	c.Log(log)
 }
