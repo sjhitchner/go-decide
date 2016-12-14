@@ -38,7 +38,7 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}, trace Lo
 		}
 	}
 
-	trace.Appendf("EVAL %s %v", t.Expression, payloadMap)
+	trace.Appendf("EVAL %s %v", t.Expression, t.Payload)
 
 	if result && t.True != nil {
 		return t.True.Evaluate(ctx, payloadMap, trace)
