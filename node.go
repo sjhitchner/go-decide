@@ -55,12 +55,6 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}, trace Lo
 	return nil
 }
 
-/*
-func gather(node *Node, payloadMap) {
-
-}
-*/
-
 func toBool(result interface{}, err error) (bool, error) {
 	if err != nil {
 		return false, err
