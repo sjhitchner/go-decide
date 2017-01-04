@@ -33,7 +33,6 @@ func (t *TestLogger) Appendf(f string, a ...interface{}) {
 }
 
 func (s *DecisionSuite) Test(c *C) {
-
 	objects := map[string][]string{
 		"object01": []string{
 			`geo_code matches '^(.*,)?(US)$'`,
@@ -64,8 +63,6 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	//fmt.Println(tree)
-
 	f, err := os.Create("decision.dot")
 	if err != nil {
 		c.Fatal(err)
@@ -73,12 +70,79 @@ func (s *DecisionSuite) Test(c *C) {
 	defer f.Close()
 	tree.Graph(f)
 
-	context := TestContext{
-		"geo_code":         "US",
-		"platform":         "iOS",
-		"device.age_group": "60",
+	{
+		context := TestContext{
+			"geo_code":         "US",
+			"platform":         "iOS",
+			"device.age_group": "60",
+		}
+		testEvaluate(c, tree, context, []string{
+			"object01",
+			"object03",
+			"object06",
+		})
 	}
 
+}
+
+func (s *DecisionSuite) Test2(c *C) {
+	objects := map[string][]string{
+		"object01": []string{
+			`is_test = true`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object02": []string{
+			`is_test = true`,
+			`platform = 'iOS'`,
+		},
+		"object03": []string{
+			`is_test = false`,
+			`platform = 'iOS'`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object04": []string{
+			`is_test = false`,
+			`platform = 'Android'`,
+		},
+		"object05": []string{
+			`is_test = false`,
+			`platform = 'Android'`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object06": []string{
+			`is_test = false`,
+			`device.age_group != "13-17"`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+	}
+
+	tree, err := NewTree(objects)
+	if err != nil {
+		c.Fatal(err)
+	}
+
+	f, err := os.Create("decision2.dot")
+	if err != nil {
+		c.Fatal(err)
+	}
+	defer f.Close()
+	tree.Graph(f)
+
+	{
+		context := TestContext{
+			"geo_code":         "US",
+			"platform":         "iOS",
+			"device.age_group": "60",
+		}
+		testEvaluate(c, tree, context, []string{
+			"object01",
+			"object03",
+			"object06",
+		})
+	}
+}
+
+func testEvaluate(c *C, tree *Tree, context exp.Context, expected []string) {
 	logger := &TestLogger{
 		make([]string, 0, 10),
 	}
@@ -88,9 +152,22 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	c.Assert(logger.Trace, HasLen, 4)
+	c.Assert(log, HasLen, len(expected))
+
+	for _, obtained := range log {
+		c.Assert(stringInSlice(obtained, expected), Equals, true)
+	}
 
 	c.Log(log)
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
 
 /*

@@ -185,6 +185,10 @@ func (t RegexExpression) Evaluate(ctx Context) (interface{}, error) {
 		return nil, errors.Wrapf(err, "Regex evaluating node failed")
 	}
 
+	if node == nil {
+		return false, nil
+	}
+
 	str, ok := node.(string)
 	if !ok {
 		return false, errors.Wrapf(IncompatibleTypeError, "REGEX %v incompatible with %v", str, reflect.TypeOf(str))
@@ -240,18 +244,23 @@ func (t LiteralExpression) Evaluate(ctx Context) (interface{}, error) {
 }
 
 func (t LiteralExpression) String() string {
-	return fmt.Sprintf("'%v'", t.Value)
+	switch v := t.Value.(type) {
+	case string:
+		return fmt.Sprintf("'%s'", v)
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
 
 // ResolverExpression
 
 type ResolverExpression struct {
-	key string
+	Key string
 }
 
 func (t ResolverExpression) Evaluate(ctx Context) (interface{}, error) {
 	// TODO arbitrarily deep context maps
-	ai, ok := ctx.Get(t.key)
+	ai, ok := ctx.Get(t.Key)
 	if !ok {
 		// TODO need to return nil is key doesn't exist
 		// return false, errors.Wrapf(ContextMissingKeyError, "key %s doesn't exist", t.key)
@@ -269,7 +278,33 @@ func (t ResolverExpression) Evaluate(ctx Context) (interface{}, error) {
 }
 
 func (t ResolverExpression) String() string {
-	return fmt.Sprintf("$%s", t.key)
+	return fmt.Sprintf("$%s", t.Key)
+}
+
+// BooleanExpression
+
+type BooleanExpression struct {
+	Key string
+}
+
+func (t BooleanExpression) Evaluate(ctx Context) (interface{}, error) {
+	ai, ok := ctx.Get(t.Key)
+	if !ok {
+		// TODO need to return nil is key doesn't exist
+		// return false, errors.Wrapf(ContextMissingKeyError, "key %s doesn't exist", t.key)
+		return false, nil
+	}
+
+	result, ok := ai.(bool)
+	if !ok {
+		return false, nil
+	}
+
+	return result, nil
+}
+
+func (t BooleanExpression) String() string {
+	return fmt.Sprintf("b$%s", t.Key)
 }
 
 func (t Logical) String() string {

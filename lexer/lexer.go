@@ -54,7 +54,7 @@ func (this *Lexer) Scan() (tok *token.Token) {
 		tok.Pos.Offset, tok.Pos.Line, tok.Pos.Column = this.pos, this.line, this.column
 		return
 	}
-	start, startLine, startColumn, end := this.pos, this.line, this.column, 0
+	start, end := this.pos, 0
 	tok.Type = token.INVALID
 	state, rune1, size := 0, rune(-1), 0
 	for state != -1 {
@@ -66,6 +66,17 @@ func (this *Lexer) Scan() (tok *token.Token) {
 		} else {
 			rune1, size = utf8.DecodeRune(this.src[this.pos:])
 			this.pos += size
+		}
+		switch rune1 {
+		case '\n':
+			this.line++
+			this.column = 1
+		case '\r':
+			this.column = 1
+		case '\t':
+			this.column += 4
+		default:
+			this.column++
 		}
 
 	
@@ -92,19 +103,6 @@ func (this *Lexer) Scan() (tok *token.Token) {
 	
 
 		if state != -1 {
-
-			switch rune1 {
-			case '\n':
-				this.line++
-				this.column = 1
-			case '\r':
-				this.column = 1
-			case '\t':
-				this.column += 4
-			default:
-				this.column++
-			}
-
 			switch {
 			case ActTab[state].Accept != -1:
 				tok.Type = ActTab[state].Accept
@@ -112,7 +110,7 @@ func (this *Lexer) Scan() (tok *token.Token) {
 				end = this.pos
 			case ActTab[state].Ignore != "":
 				// fmt.Printf("\t Ignore(%s)\n", string(act))
-				start, startLine, startColumn = this.pos, this.line, this.column
+				start = this.pos
 				state = 0
 				if start >= len(this.src) {
 					tok.Type = token.EOF
@@ -131,12 +129,9 @@ func (this *Lexer) Scan() (tok *token.Token) {
 	} else {
 		tok.Lit = []byte{}
 	}
-	tok.Pos.Offset, tok.Pos.Line ,tok.Pos.Column = start, startLine, startColumn
-
-	
-	// fmt.Printf("Token at %s: %s \"%s\"\n", tok.String(), token.TokMap.Id(tok.Type), tok.Lit)
-	
-
+	tok.Pos.Offset = start
+	tok.Pos.Column = this.column
+	tok.Pos.Line = this.line
 	return
 }
 
@@ -168,36 +163,36 @@ Lexer symbols:
 19: '<'
 20: '='
 21: '='
-22: '='
-23: '='
-24: '!'
-25: '='
-26: 'i'
-27: 's'
-28: 'c'
-29: 'o'
-30: 'n'
-31: 't'
-32: 'a'
-33: 'i'
-34: 'n'
-35: 's'
-36: 'm'
-37: 'a'
-38: 't'
-39: 'c'
-40: 'h'
-41: 'e'
-42: 's'
-43: 't'
-44: 'r'
-45: 'u'
-46: 'e'
-47: 'f'
-48: 'a'
-49: 'l'
-50: 's'
-51: 'e'
+22: 't'
+23: 'r'
+24: 'u'
+25: 'e'
+26: 'f'
+27: 'a'
+28: 'l'
+29: 's'
+30: 'e'
+31: '='
+32: '='
+33: '!'
+34: '='
+35: 'i'
+36: 's'
+37: 'c'
+38: 'o'
+39: 'n'
+40: 't'
+41: 'a'
+42: 'i'
+43: 'n'
+44: 's'
+45: 'm'
+46: 'a'
+47: 't'
+48: 'c'
+49: 'h'
+50: 'e'
+51: 's'
 52: ' '
 53: '\t'
 54: '\n'

@@ -23,7 +23,12 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 	// Build up frequency table
 	for _, list := range objects {
 		for _, expString := range list {
-			sorter.AddToFrequencies(expString)
+			expression, err := NewExpression(expressions[0])
+			if err != nil {
+				return nil, err
+			}
+
+			sorter.AddToFrequencies(expression.String())
 		}
 	}
 
