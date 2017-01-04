@@ -182,20 +182,10 @@ var productionsTable = ProdTab {
 		},
 	},
 	ProdTabEntry{
-		String: `Term : "bool" Factor	<< expression.NewComparisonBool(X[1]) >>`,
-		Id: "Term",
-		NTType: 2,
-		Index: 16,
-		NumSymbols: 2,
-		ReduceFunc: func(X []Attrib) (Attrib, error) {
-			return expression.NewComparisonBool(X[1])
-		},
-	},
-	ProdTabEntry{
 		String: `Term : Factor	<<  >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 17,
+		Index: 16,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return X[0], nil
@@ -205,7 +195,7 @@ var productionsTable = ProdTab {
 		String: `Factor : variable	<< expression.NewResolver(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 18,
+		Index: 17,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewResolver(X[0])
@@ -215,7 +205,7 @@ var productionsTable = ProdTab {
 		String: `Factor : string_lit	<< expression.NewLiteralString(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 19,
+		Index: 18,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralString(X[0])
@@ -225,7 +215,7 @@ var productionsTable = ProdTab {
 		String: `Factor : int_lit	<< expression.NewLiteralInt(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 20,
+		Index: 19,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralInt(X[0])
@@ -235,7 +225,7 @@ var productionsTable = ProdTab {
 		String: `Factor : float_lit	<< expression.NewLiteralFloat(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 21,
+		Index: 20,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralFloat(X[0])
@@ -245,7 +235,7 @@ var productionsTable = ProdTab {
 		String: `Factor : "true"	<< expression.NewLiteralBool(true) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 22,
+		Index: 21,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralBool(true)
@@ -255,7 +245,7 @@ var productionsTable = ProdTab {
 		String: `Factor : "false"	<< expression.NewLiteralBool(false) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 23,
+		Index: 22,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralBool(false)

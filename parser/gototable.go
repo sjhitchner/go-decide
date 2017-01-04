@@ -41,8 +41,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		14, // Term
-		15, // Factor
+		13, // Term
+		14, // Factor
 		
 
 	},
@@ -60,7 +60,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		33, // Factor
+		-1, // Factor
 		
 
 	},
@@ -113,8 +113,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		-1, // Term
-		-1, // Factor
+		31, // Term
+		14, // Factor
 		
 
 	},
@@ -122,8 +122,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		40, // Term
-		15, // Factor
+		32, // Term
+		14, // Factor
 		
 
 	},
@@ -131,8 +131,8 @@ var gotoTab = gotoTable{
 		
 		-1, // S'
 		-1, // Expression
-		41, // Term
-		15, // Factor
+		-1, // Term
+		-1, // Factor
 		
 
 	},
@@ -159,7 +159,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		52, // Factor
+		-1, // Factor
 		
 
 	},
@@ -204,7 +204,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		43, // Factor
 		
 
 	},
@@ -213,7 +213,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		50, // Factor
 		
 
 	},
@@ -222,7 +222,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		59, // Factor
+		51, // Factor
 		
 
 	},
@@ -231,7 +231,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		60, // Factor
+		52, // Factor
 		
 
 	},
@@ -240,7 +240,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		61, // Factor
+		53, // Factor
 		
 
 	},
@@ -249,7 +249,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		62, // Factor
+		54, // Factor
 		
 
 	},
@@ -258,7 +258,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		63, // Factor
+		55, // Factor
 		
 
 	},
@@ -267,7 +267,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		64, // Factor
+		57, // Factor
 		
 
 	},
@@ -276,7 +276,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		65, // Factor
+		58, // Factor
 		
 
 	},
@@ -285,7 +285,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		67, // Factor
+		59, // Factor
 		
 
 	},
@@ -294,7 +294,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		68, // Factor
+		-1, // Factor
 		
 
 	},
@@ -303,7 +303,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		69, // Factor
+		-1, // Factor
 		
 
 	},
@@ -312,7 +312,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		60, // Factor
 		
 
 	},
@@ -321,7 +321,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		67, // Factor
 		
 
 	},
@@ -330,7 +330,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		68, // Factor
 		
 
 	},
@@ -339,7 +339,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		69, // Factor
 		
 
 	},
@@ -348,7 +348,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		70, // Factor
 		
 
 	},
@@ -357,7 +357,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		71, // Factor
 		
 
 	},
@@ -366,7 +366,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		72, // Factor
 		
 
 	},
@@ -375,7 +375,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		74, // Factor
 		
 
 	},
@@ -384,7 +384,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		75, // Factor
 		
 
 	},
@@ -393,7 +393,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		70, // Factor
+		76, // Factor
 		
 
 	},
@@ -402,7 +402,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		71, // Factor
+		-1, // Factor
 		
 
 	},
@@ -411,7 +411,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		72, // Factor
+		-1, // Factor
 		
 
 	},
@@ -420,7 +420,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		73, // Factor
+		-1, // Factor
 		
 
 	},
@@ -429,7 +429,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		74, // Factor
+		-1, // Factor
 		
 
 	},
@@ -438,7 +438,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		75, // Factor
+		-1, // Factor
 		
 
 	},
@@ -447,7 +447,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		76, // Factor
+		-1, // Factor
 		
 
 	},
@@ -456,7 +456,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		78, // Factor
+		-1, // Factor
 		
 
 	},
@@ -465,7 +465,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		79, // Factor
+		-1, // Factor
 		
 
 	},
@@ -474,7 +474,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		80, // Factor
+		-1, // Factor
 		
 
 	},
@@ -519,7 +519,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		77, // Factor
 		
 
 	},
@@ -609,7 +609,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		81, // Factor
+		-1, // Factor
 		
 
 	},
@@ -672,7 +672,7 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		-1, // Factor
+		78, // Factor
 		
 
 	},
@@ -708,47 +708,11 @@ var gotoTab = gotoTable{
 		-1, // S'
 		-1, // Expression
 		-1, // Term
-		82, // Factor
+		-1, // Factor
 		
 
 	},
 	gotoRow{ // S78
-		
-		-1, // S'
-		-1, // Expression
-		-1, // Term
-		-1, // Factor
-		
-
-	},
-	gotoRow{ // S79
-		
-		-1, // S'
-		-1, // Expression
-		-1, // Term
-		-1, // Factor
-		
-
-	},
-	gotoRow{ // S80
-		
-		-1, // S'
-		-1, // Expression
-		-1, // Term
-		-1, // Factor
-		
-
-	},
-	gotoRow{ // S81
-		
-		-1, // S'
-		-1, // Expression
-		-1, // Term
-		-1, // Factor
-		
-
-	},
-	gotoRow{ // S82
 		
 		-1, // S'
 		-1, // Expression
