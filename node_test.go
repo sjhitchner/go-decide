@@ -88,9 +88,108 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	c.Assert(logger.Trace, HasLen, 4)
+	c.Assert(log, HasLen, 3)
 
 	c.Log(log)
+}
+
+func (s *DecisionSuite) TestTwo(c *C) {
+
+	objects := map[string][]string{
+		"object01": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+			`is_test = false`,
+		},
+		"object02": []string{
+			`device.gender != "male"`,
+			`is_test = false`,
+		},
+		"object03": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+			`is_test = false`,
+		},
+		"object04": []string{
+			`is_test = true`,
+		},
+		"object05": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+			`is_test = false`,
+		},
+		"object06": []string{
+			`device.age_group != "13-17"`,
+			`geo_code matches '^(.*,)?(US)$'`,
+			`is_test = true`,
+		},
+	}
+
+	tree, err := NewTree(objects)
+	if err != nil {
+		c.Fatal(err)
+	}
+
+	//fmt.Println(tree)
+
+	f, err := os.Create("decision2.dot")
+	if err != nil {
+		c.Fatal(err)
+	}
+	defer f.Close()
+	tree.Graph(f)
+
+	// 	{
+	// 	context := TestContext{
+	// 		"geo_code":         "US",
+	// 		"platform":         "iOS",
+	// 		"device.age_group": "60",
+	// 		"is_test":          true,
+	// 		"is_test":          false,
+	// 	}
+	// 	testEvaluate(c, tree, context, []string{
+	// 		"object04",
+	// 		"object02"
+	// 	})
+	// }
+	{
+		context := TestContext{
+			"is_test": true,
+		}
+		testEvaluate(c, tree, context, []string{"object04"})
+	}
+	{
+		context := TestContext{
+			"is_test": false,
+		}
+		testEvaluate(c, tree, context, []string{})
+	}
+
+}
+
+func testEvaluate(c *C, tree *Tree, context exp.Context, expected []string) {
+	logger := &TestLogger{
+		make([]string, 0, 10),
+	}
+
+	log, err := tree.Evaluate(context, logger)
+	if err != nil {
+		c.Fatal(err)
+	}
+
+	c.Assert(log, HasLen, len(expected))
+
+	for _, obtained := range log {
+		c.Assert(stringInSlice(obtained, expected), Equals, true)
+	}
+
+	c.Log(log)
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
 
 /*
