@@ -112,10 +112,40 @@ var productionsTable = ProdTab {
 		},
 	},
 	ProdTabEntry{
-		String: `Term : Factor "=" Factor	<< expression.NewComparisonEquals(X[0], X[2]) >>`,
+		String: `Term : Factor "=" "true"	<< expression.NewBooleanEquals(X[0], true) >>`,
 		Id: "Term",
 		NTType: 2,
 		Index: 9,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return expression.NewBooleanEquals(X[0], true)
+		},
+	},
+	ProdTabEntry{
+		String: `Term : Factor "=" "false"	<< expression.NewBooleanEquals(X[0], false) >>`,
+		Id: "Term",
+		NTType: 2,
+		Index: 10,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return expression.NewBooleanEquals(X[0], false)
+		},
+	},
+	ProdTabEntry{
+		String: `Term : Factor "=" Factor	<< expression.NewComparisonEquals(X[0], X[2]) >>`,
+		Id: "Term",
+		NTType: 2,
+		Index: 11,
+		NumSymbols: 3,
+		ReduceFunc: func(X []Attrib) (Attrib, error) {
+			return expression.NewComparisonEquals(X[0], X[2])
+		},
+	},
+	ProdTabEntry{
+		String: `Term : Factor "=" Factor	<< expression.NewComparisonEquals(X[0], X[2]) >>`,
+		Id: "Term",
+		NTType: 2,
+		Index: 12,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonEquals(X[0], X[2])
@@ -125,7 +155,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "==" Factor	<< expression.NewComparisonEquals(X[0], X[2]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 10,
+		Index: 13,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonEquals(X[0], X[2])
@@ -135,7 +165,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "!=" Factor	<< expression.NewComparisonNotEquals(X[0], X[2]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 11,
+		Index: 14,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonNotEquals(X[0], X[2])
@@ -145,7 +175,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "is" Factor	<< expression.NewComparisonIs(X[0], X[2]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 12,
+		Index: 15,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonIs(X[0], X[2])
@@ -155,7 +185,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "is" "not" Factor	<< expression.NewComparisonIsNot(X[0], X[3]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 13,
+		Index: 16,
 		NumSymbols: 4,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonIsNot(X[0], X[3])
@@ -165,7 +195,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "contains" Factor	<< expression.NewComparisonContains(X[0], X[2]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 14,
+		Index: 17,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewComparisonContains(X[0], X[2])
@@ -175,7 +205,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor "matches" Factor	<< expression.NewMatches(X[0], X[2]) >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 15,
+		Index: 18,
 		NumSymbols: 3,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewMatches(X[0], X[2])
@@ -185,7 +215,7 @@ var productionsTable = ProdTab {
 		String: `Term : Factor	<<  >>`,
 		Id: "Term",
 		NTType: 2,
-		Index: 16,
+		Index: 19,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return X[0], nil
@@ -195,7 +225,7 @@ var productionsTable = ProdTab {
 		String: `Factor : variable	<< expression.NewResolver(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 17,
+		Index: 20,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewResolver(X[0])
@@ -205,7 +235,7 @@ var productionsTable = ProdTab {
 		String: `Factor : string_lit	<< expression.NewLiteralString(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 18,
+		Index: 21,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralString(X[0])
@@ -215,7 +245,7 @@ var productionsTable = ProdTab {
 		String: `Factor : int_lit	<< expression.NewLiteralInt(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 19,
+		Index: 22,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralInt(X[0])
@@ -225,7 +255,7 @@ var productionsTable = ProdTab {
 		String: `Factor : float_lit	<< expression.NewLiteralFloat(X[0]) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 20,
+		Index: 23,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralFloat(X[0])
@@ -235,7 +265,7 @@ var productionsTable = ProdTab {
 		String: `Factor : "true"	<< expression.NewLiteralBool(true) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 21,
+		Index: 24,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralBool(true)
@@ -245,7 +275,7 @@ var productionsTable = ProdTab {
 		String: `Factor : "false"	<< expression.NewLiteralBool(false) >>`,
 		Id: "Factor",
 		NTType: 3,
-		Index: 22,
+		Index: 25,
 		NumSymbols: 1,
 		ReduceFunc: func(X []Attrib) (Attrib, error) {
 			return expression.NewLiteralBool(false)
