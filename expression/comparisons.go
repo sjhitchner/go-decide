@@ -51,6 +51,7 @@ func OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a > b
 		},
+		nil,
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "GreaterThan Error")
@@ -68,6 +69,7 @@ func OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a >= b
 		},
+		nil,
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "GreaterThanEquals Error")
@@ -85,6 +87,7 @@ func OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a < b
 		},
+		nil,
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "LessThan Error")
@@ -102,6 +105,7 @@ func OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a <= b
 		},
+		nil,
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "LessThanEquals Error")
@@ -117,6 +121,9 @@ func OperationEquals(ai interface{}, bi interface{}) (bool, error) {
 			return a == b
 		},
 		func(a, b string) bool {
+			return a == b
+		},
+		func(a, b bool) bool {
 			return a == b
 		},
 	)
@@ -136,6 +143,9 @@ func OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a != b
 		},
+		func(a, b bool) bool {
+			return a != b
+		},
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "NotEquals Error")
@@ -153,6 +163,9 @@ func OperationIs(ai interface{}, bi interface{}) (bool, error) {
 		func(a, b string) bool {
 			return a == b
 		},
+		func(a, b bool) bool {
+			return a == b
+		},
 	)
 	if err != nil {
 		return false, errors.Wrap(err, "Is Error")
@@ -160,7 +173,7 @@ func OperationIs(ai interface{}, bi interface{}) (bool, error) {
 	return result, nil
 }
 
-func ComparisonOperation(ai interface{}, bi interface{}, f func(a, b float64) bool, fs func(a, b string) bool) (bool, error) {
+func ComparisonOperation(ai interface{}, bi interface{}, f func(a, b float64) bool, fs func(a, b string) bool, fb func(a, b bool) bool) (bool, error) {
 	switch a := ai.(type) {
 	case int64:
 		switch b := bi.(type) {
@@ -186,6 +199,13 @@ func ComparisonOperation(ai interface{}, bi interface{}, f func(a, b float64) bo
 			return fs(a, b), nil
 		}
 		return false, errors.Wrapf(IncompatibleTypeError, "(string) %v incompatible with %v", ai, bi)
+
+	case bool:
+		b, ok := bi.(bool)
+		if ok {
+			return fb(a, b), nil
+		}
+		return false, errors.Wrapf(IncompatibleTypeError, "(bool) %v incompatible with %v", ai, bi)
 
 	default:
 		return false, errors.Wrapf(IncompatibleTypeError, "%v invalid type", a)

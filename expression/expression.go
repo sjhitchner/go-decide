@@ -240,7 +240,12 @@ func (t LiteralExpression) Evaluate(ctx Context) (interface{}, error) {
 }
 
 func (t LiteralExpression) String() string {
-	return fmt.Sprintf("'%v'", t.Value)
+	switch valueType := t.Value.(type) {
+	case bool:
+		return fmt.Sprintf("%t", valueType)
+	default:
+		return fmt.Sprintf("'%s'", valueType)
+	}
 }
 
 // ResolverExpression
