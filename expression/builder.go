@@ -27,26 +27,41 @@ func NewComparisonLessThan(a, b Attrib) (*ComparisonExpression, error) {
 func NewComparisonLessThanEquals(a, b Attrib) (*ComparisonExpression, error) {
 	return &ComparisonExpression{a.(Expression), b.(Expression), LessThanEquals}, nil
 }
-
 func NewComparisonEquals(a, b Attrib) (*ComparisonExpression, error) {
 	return &ComparisonExpression{a.(Expression), b.(Expression), IsEquals}, nil
 }
 
 func NewComparisonNotEquals(a, b Attrib) (*ComparisonExpression, error) {
+	//TODO
+
 	return &ComparisonExpression{a.(Expression), b.(Expression), NotEquals}, nil
 }
 
 func NewComparisonIsNot(a, b Attrib) (*ComparisonExpression, error) {
-	fmt.Println("XXX", a, reflect.TypeOf(a), b, reflect.TypeOf(b))
+	//TODO
+
 	return &ComparisonExpression{a.(Expression), b.(Expression), IsNot}, nil
 }
 
 func NewComparisonIs(a, b Attrib) (*ComparisonExpression, error) {
+	//TODO
+
 	return &ComparisonExpression{a.(Expression), b.(Expression), Is}, nil
 }
 
 func NewComparisonContains(a, b Attrib) (*ComparisonExpression, error) {
 	return &ComparisonExpression{a.(Expression), b.(Expression), Contains}, nil
+}
+
+func NewBooleanEquals(a Attrib, b bool) (*BooleanExpression, error) {
+	resolver, ok := a.(*ResolverExpression)
+	if !ok {
+		return nil, errors.Errorf("Boolean Expression must be given a Resolver/variable node (%v)", reflect.TypeOf(b))
+	}
+
+	key := resolver.Key
+	fmt.Println("BooleanEquals ", key, a, reflect.TypeOf(a))
+	return &BooleanExpression{key}, nil
 }
 
 func NewMatches(a, b Attrib) (*RegexExpression, error) {

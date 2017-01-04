@@ -40,6 +40,9 @@ Term : Factor ">" Factor                      << expression.NewComparisonGreater
        | Factor ">=" Factor                   << expression.NewComparisonGreaterThanEquals($0, $2) >>
        | Factor "<" Factor                    << expression.NewComparisonLessThan($0, $2) >>
        | Factor "<=" Factor                   << expression.NewComparisonLessThanEquals($0, $2) >>
+       | Factor "=" "true"                    << expression.NewBooleanEquals($0, true) >>
+       | Factor "=" "false"                   << expression.NewBooleanEquals($0, false) >>
+       | Factor "=" Factor                    << expression.NewComparisonEquals($0, $2) >>
        | Factor "=" Factor                    << expression.NewComparisonEquals($0, $2) >>
        | Factor "==" Factor                   << expression.NewComparisonEquals($0, $2) >>
        | Factor "!=" Factor                   << expression.NewComparisonNotEquals($0, $2) >>
@@ -47,7 +50,6 @@ Term : Factor ">" Factor                      << expression.NewComparisonGreater
        | Factor "is" "not" Factor             << expression.NewComparisonIsNot($0, $3) >>
        | Factor "contains" Factor             << expression.NewComparisonContains($0, $2) >>
        | Factor "matches" Factor              << expression.NewMatches($0, $2) >>
-       | "bool" Factor                        << expression.NewComparisonBool($1) >>
        | Factor
        ;
 
