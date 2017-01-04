@@ -47,6 +47,7 @@ Term : Factor ">" Factor                      << expression.NewComparisonGreater
        | Factor "is" "not" Factor             << expression.NewComparisonIsNot($0, $3) >>
        | Factor "contains" Factor             << expression.NewComparisonContains($0, $2) >>
        | Factor "matches" Factor              << expression.NewMatches($0, $2) >>
+       | "bool" Factor                        << expression.NewComparisonBool($1) >>
        | Factor
        ;
 
