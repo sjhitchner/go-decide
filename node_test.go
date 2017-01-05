@@ -172,12 +172,12 @@ func (s *DecisionSuite) Test_Context8(c *C) {
 	})
 }
 
-/*
-	c.Log(log)
+func (s *DecisionSuite) Test_Find(c *C) {
+	for object, expressions := range s.Objects {
 
-	for object, expressions := range objects {
-		path, found := tree.Find(object)
+		path, found := s.Tree.Find(object)
 		c.Assert(found, Equals, true)
+
 		c.Assert(len(path), Equals, len(expressions))
 		for _, expstr := range expressions {
 			expression, err := NewExpression(expstr)
@@ -186,7 +186,6 @@ func (s *DecisionSuite) Test_Context8(c *C) {
 		}
 	}
 }
-*/
 
 func (s *DecisionSuite) testEvaluate(c *C, context exp.Context, expected []string) {
 	logger := &TestLogger{make([]string, 0, 10)}
