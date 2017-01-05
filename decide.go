@@ -18,19 +18,22 @@ type Tree struct {
 
 func NewTree(objects map[string][]string) (*Tree, error) {
 
-	sorter := NewFrequencySorter()
+	objectSorter := NewFrequencySorter()
+	expressionSorter := NewFrequencySorter()
 
-	// Build up frequency table
-	for _, list := range objects {
+	// Build up frequency tables
+	for object, list := range objects {
 		for _, expString := range list {
-			sorter.AddToFrequencies(expString)
+			expressionSorter.AddToFrequencies(expString)
 		}
+		objectSorter.AddValue(object, len(list))
 	}
 
 	var root *Node
 	var err error
-	for object, expressions := range objects {
-		sorter.Sort(expressions)
+	for _, object := range objectSorter.FrequencyList() {
+		expressions := objects[object]
+		expressionSorter.SortReverse(expressions)
 
 		root, err = addNode(root, expressions, object)
 		if err != nil {
