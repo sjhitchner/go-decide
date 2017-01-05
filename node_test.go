@@ -40,7 +40,7 @@ func (s *DecisionSuite) Test(c *C) {
 		},
 		"object02": []string{
 			`platform = 'iOS'`,
-			`device.gender != "male"`,
+			`device.gender != 'male'`,
 		},
 		"object03": []string{
 			`platform = 'iOS'`,
@@ -88,9 +88,53 @@ func (s *DecisionSuite) Test(c *C) {
 		c.Fatal(err)
 	}
 
-	c.Assert(logger.Trace, HasLen, 4)
+	//c.Assert(logger.Trace, HasLen, 4)
+	c.Assert(log, HasLen, 3)
+	c.Assert(log, Contains, "object01")
+	c.Assert(log, Contains, "object03")
+	c.Assert(log, Contains, "object06")
+	//c.Assert(log, Contains, "object0")
 
 	c.Log(log)
+
+	for object, expressions := range objects {
+		path, found := tree.Find(object)
+		c.Assert(found, Equals, true)
+		c.Assert(len(path), Equals, len(expressions))
+		for _, expstr := range expressions {
+			expression, err := NewExpression(expstr)
+			c.Assert(err, IsNil)
+			c.Assert(path, Contains, expression.String())
+		}
+	}
+}
+
+type containsChecker struct {
+	*CheckerInfo
+}
+
+var Contains Checker = &containsChecker{
+	&CheckerInfo{Name: "Contains", Params: []string{"obtained", "expected"}},
+}
+
+func (checker *containsChecker) Check(params []interface{}, names []string) (result bool, error string) {
+	defer func() {
+		if v := recover(); v != nil {
+			result = false
+			error = fmt.Sprint(v)
+		}
+	}()
+
+	return stringInSlice(params[1].(string), params[0].([]string)), ""
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
 
 /*
