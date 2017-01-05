@@ -281,32 +281,6 @@ func (t ResolverExpression) String() string {
 	return fmt.Sprintf("$%s", t.Key)
 }
 
-// BooleanExpression
-
-type BooleanExpression struct {
-	Key string
-}
-
-func (t BooleanExpression) Evaluate(ctx Context) (interface{}, error) {
-	ai, ok := ctx.Get(t.Key)
-	if !ok {
-		// TODO need to return nil is key doesn't exist
-		// return false, errors.Wrapf(ContextMissingKeyError, "key %s doesn't exist", t.key)
-		return false, nil
-	}
-
-	result, ok := ai.(bool)
-	if !ok {
-		return false, nil
-	}
-
-	return result, nil
-}
-
-func (t BooleanExpression) String() string {
-	return fmt.Sprintf("b$%s", t.Key)
-}
-
 func (t Logical) String() string {
 	switch t {
 	case And:
