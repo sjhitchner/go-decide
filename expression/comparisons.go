@@ -41,10 +41,14 @@ func OperationNot(ai interface{}) (interface{}, error) {
 	return false, errors.Wrapf(IncompatibleTypeError, "NOT %v invalid type", a)
 }
 
-func OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationGreaterThan(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return false
+		},
+		func(a, b int64) bool {
+			return a > b
+		},
 		func(a, b float64) bool {
 			return a > b
 		},
@@ -52,16 +56,16 @@ func OperationGreaterThan(ai interface{}, bi interface{}) (bool, error) {
 			return a > b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "GreaterThan Error")
-	}
-	return result, nil
 }
 
-func OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationGreaterThanEquals(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return false
+		},
+		func(a, b int64) bool {
+			return a >= b
+		},
 		func(a, b float64) bool {
 			return a >= b
 		},
@@ -69,16 +73,16 @@ func OperationGreaterThanEquals(ai interface{}, bi interface{}) (bool, error) {
 			return a >= b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "GreaterThanEquals Error")
-	}
-	return result, nil
 }
 
-func OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationLessThan(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return false
+		},
+		func(a, b int64) bool {
+			return a < b
+		},
 		func(a, b float64) bool {
 			return a < b
 		},
@@ -86,16 +90,16 @@ func OperationLessThan(ai interface{}, bi interface{}) (bool, error) {
 			return a < b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "LessThan Error")
-	}
-	return result, nil
 }
 
-func OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationLessThanEquals(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return false
+		},
+		func(a, b int64) bool {
+			return a <= b
+		},
 		func(a, b float64) bool {
 			return a <= b
 		},
@@ -103,16 +107,16 @@ func OperationLessThanEquals(ai interface{}, bi interface{}) (bool, error) {
 			return a <= b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "LessThanEquals Error")
-	}
-	return result, nil
 }
 
-func OperationEquals(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationEquals(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return a == b
+		},
+		func(a, b int64) bool {
+			return a == b
+		},
 		func(a, b float64) bool {
 			return a == b
 		},
@@ -120,16 +124,16 @@ func OperationEquals(ai interface{}, bi interface{}) (bool, error) {
 			return a == b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "Equals Error")
-	}
-	return result, nil
 }
 
-func OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+func OperationNotEquals(ai, bi interface{}) (bool, error) {
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return a != b
+		},
+		func(a, b int64) bool {
+			return a != b
+		},
 		func(a, b float64) bool {
 			return a != b
 		},
@@ -137,16 +141,16 @@ func OperationNotEquals(ai interface{}, bi interface{}) (bool, error) {
 			return a != b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "NotEquals Error")
-	}
-	return result, nil
 }
 
 func OperationIs(ai interface{}, bi interface{}) (bool, error) {
-	result, err := ComparisonOperation(
-		ai,
-		bi,
+	return ComparisonOperation(ai, bi,
+		func(a, b bool) bool {
+			return a == b
+		},
+		func(a, b int64) bool {
+			return a == b
+		},
 		func(a, b float64) bool {
 			return a == b
 		},
@@ -154,42 +158,131 @@ func OperationIs(ai interface{}, bi interface{}) (bool, error) {
 			return a == b
 		},
 	)
-	if err != nil {
-		return false, errors.Wrap(err, "Is Error")
-	}
-	return result, nil
 }
 
-func ComparisonOperation(ai interface{}, bi interface{}, f func(a, b float64) bool, fs func(a, b string) bool) (bool, error) {
-	switch a := ai.(type) {
-	case int64:
-		switch b := bi.(type) {
+func ComparisonOperation(
+	ai, bi interface{},
+	fbool func(a, b bool) bool,
+	fint func(a, b int64) bool,
+	ffloat func(a, b float64) bool,
+	fstr func(a, b string) bool) (bool, error) {
+
+	if ai != nil {
+		switch a := ai.(type) {
+		case bool:
+			b, ok := bi.(bool)
+			if !ok {
+				if bi != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(bool) %v incompatible with %v", ai, bi)
+				}
+				b = false
+			}
+			return fbool(a, b), nil
+
+		case int:
+			b, ok := bi.(int)
+			if !ok {
+				if bi != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(int) %v incompatible with %v", ai, bi)
+				}
+				b = 0
+			}
+			return fint(int64(a), int64(b)), nil
+
 		case int64:
-			return f(float64(a), float64(b)), nil
-		case float64:
-			return f(float64(a), b), nil
-		}
-		return false, errors.Wrapf(IncompatibleTypeError, "(int) %v incompatible with %v", ai, bi)
+			b, ok := bi.(int64)
+			if !ok {
+				if bi != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(int64) %v incompatible with %v", ai, bi)
+				}
+				b = 0
+			}
+			return fint(a, b), nil
 
-	case float64:
+		case float64:
+			b, ok := bi.(float64)
+			if !ok {
+				if bi != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(float64) %v incompatible with %v", ai, bi)
+				}
+				b = 0
+			}
+			return ffloat(a, b), nil
+
+		case string:
+			b, ok := bi.(string)
+			if !ok {
+				if bi != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(string) %v incompatible with %v", ai, bi)
+				}
+				b = ""
+			}
+			return fstr(a, b), nil
+
+		default:
+			//return fn(a, nil)
+			return false, errors.Errorf("Invalid type %v, %v", reflect.TypeOf(ai), ai)
+		}
+
+	} else if bi != nil {
 		switch b := bi.(type) {
+		case bool:
+			a, ok := ai.(bool)
+			if !ok {
+				if ai != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(bool) %v incompatible with %v", ai, bi)
+				}
+				a = false
+			}
+			return fbool(a, b), nil
+
+		case int:
+			a, ok := ai.(int)
+			if !ok {
+				if ai != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(int) %v incompatible with %v", ai, bi)
+				}
+				a = 0
+			}
+			return fint(int64(a), int64(b)), nil
+
 		case int64:
-			return f(a, float64(b)), nil
+			a, ok := ai.(int64)
+			if !ok {
+				if ai != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(int64) %v incompatible with %v", ai, bi)
+				}
+				a = 0
+			}
+			return fint(a, b), nil
+
 		case float64:
-			return f(a, b), nil
-		}
-		return false, errors.Wrapf(IncompatibleTypeError, "(float) %v incompatible with %v", ai, bi)
+			a, ok := ai.(float64)
+			if !ok {
+				if ai != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(float64) %v incompatible with %v", ai, bi)
+				}
+				a = 0
+			}
+			return ffloat(a, b), nil
 
-	case string:
-		b, ok := bi.(string)
-		if ok {
-			return fs(a, b), nil
-		}
-		return false, errors.Wrapf(IncompatibleTypeError, "(string) %v incompatible with %v", ai, bi)
+		case string:
+			a, ok := ai.(string)
+			if !ok {
+				if ai != nil {
+					return false, errors.Wrapf(IncompatibleTypeError, "(string) %v incompatible with %v", ai, bi)
+				}
+				a = ""
+			}
+			return fstr(a, b), nil
 
-	default:
-		return false, errors.Wrapf(IncompatibleTypeError, "%v invalid type", a)
+		default:
+			//return fn(nil, b), nil
+			return false, errors.Errorf("Invalid type %v, %v", reflect.TypeOf(ai), ai)
+		}
 	}
+
+	return false, nil
 }
 
 func OperationContains(ai interface{}, bi interface{}) (bool, error) {

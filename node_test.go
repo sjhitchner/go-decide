@@ -97,22 +97,15 @@ func (s *DecisionSuite) Test_Context1(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object07",
 	})
 }
 
 func (s *DecisionSuite) Test_Context2(c *C) {
 	context := TestContext{
-		"geo_code": "US",
-	}
-	s.testEvaluate(c, context, []string{
-		"object01",
-	})
-}
-
-func (s *DecisionSuite) Test_Context3(c *C) {
-	context := TestContext{
-		"geo_code": "US",
-		"platform": "iOS",
+		"geo_code":      "US",
+		"platform":      "iOS",
+		"device.gender": "male",
 	}
 	s.testEvaluate(c, context, []string{
 		"object01",
@@ -120,7 +113,7 @@ func (s *DecisionSuite) Test_Context3(c *C) {
 	})
 }
 
-func (s *DecisionSuite) Test_Context4(c *C) {
+func (s *DecisionSuite) Test_Context3(c *C) {
 	context := TestContext{
 		"geo_code":      "US",
 		"platform":      "iOS",
@@ -133,19 +126,42 @@ func (s *DecisionSuite) Test_Context4(c *C) {
 	})
 }
 
+func (s *DecisionSuite) Test_Context4(c *C) {
+	context := TestContext{
+		"geo_code": "US",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object06",
+	})
+}
+
 func (s *DecisionSuite) Test_Context5(c *C) {
 	context := TestContext{
-		"geo_code":         "US",
-		"platform":         "iOS",
-		"device.age_group": "60",
+		"geo_code": "US",
+		"platform": "iOS",
 	}
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object07",
 	})
 }
 
 func (s *DecisionSuite) Test_Context6(c *C) {
+	context := TestContext{
+		"geo_code":      "US",
+		"platform":      "iOS",
+		"device.gender": "female",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+		"object07",
+	})
+}
+
+func (s *DecisionSuite) Test_Context7(c *C) {
 	context := TestContext{
 		"geo_code":         "US",
 		"platform":         "Android",
@@ -158,7 +174,7 @@ func (s *DecisionSuite) Test_Context6(c *C) {
 	})
 }
 
-func (s *DecisionSuite) Test_Context7(c *C) {
+func (s *DecisionSuite) Test_Context8(c *C) {
 	context := TestContext{
 		"geo_code": "CA",
 		"platform": "Android",
@@ -168,7 +184,7 @@ func (s *DecisionSuite) Test_Context7(c *C) {
 	})
 }
 
-func (s *DecisionSuite) Test_Context8(c *C) {
+func (s *DecisionSuite) Test_Context9(c *C) {
 	context := TestContext{
 		"geo_code":      "CA",
 		"platform":      "iOS",
