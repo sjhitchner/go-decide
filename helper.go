@@ -35,7 +35,7 @@ func (t FrequencySorter) FrequencyList() []string {
 	for key, _ := range t.frequencies {
 		list = append(list, key)
 	}
-	t.Sort(list)
+	t.SortReverse(list)
 	return list
 }
 

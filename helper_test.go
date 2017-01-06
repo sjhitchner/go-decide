@@ -106,11 +106,11 @@ func (s *DecisionSuite) Test_FrequencySorterObjects(c *C) {
 
 	sortedObjects := objectSorter.FrequencyList()
 	c.Assert(sortedObjects, HasLen, 7)
-	c.Assert(sortedObjects[0], Equals, "object03")
-	c.Assert(sortedObjects[1], Equals, "object02")
-	c.Assert(sortedObjects[2], Equals, "object06")
+	c.Assert(sortedObjects[0], Equals, "object04")
+	c.Assert(sortedObjects[1], Equals, "object07")
+	c.Assert(sortedObjects[2], Equals, "object05")
 	c.Assert(sortedObjects[3], Equals, "object01")
-	c.Assert(sortedObjects[4], Equals, "object05")
-	c.Assert(sortedObjects[5], Equals, "object07")
-	c.Assert(sortedObjects[6], Equals, "object04")
+	c.Assert(sortedObjects[4], Equals, "object06")
+	c.Assert(sortedObjects[5], Equals, "object02")
+	c.Assert(sortedObjects[6], Equals, "object03")
 }
