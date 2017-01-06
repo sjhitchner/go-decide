@@ -5,6 +5,7 @@ import (
 	exp "github.com/sjhitchner/go-decide/expression"
 	. "gopkg.in/check.v1"
 	"os"
+	"os/exec"
 	"testing"
 )
 
@@ -66,16 +67,22 @@ func (s *DecisionSuite) SetUpSuite(c *C) {
 	}
 
 	tree, err := NewTree(s.Objects)
-	if err != nil {
-		c.Fatal(err)
-	}
+	c.Assert(err, IsNil)
 
 	f, err := os.Create("decision.dot")
-	if err != nil {
-		c.Fatal(err)
-	}
+	c.Assert(err, IsNil)
 	defer f.Close()
 	tree.Graph(f)
+
+	cmd := exec.Command("dot", "-Tpdf", "decision.dot")
+	pdf, err := os.Create("decision.pdf")
+	c.Assert(err, IsNil)
+	defer pdf.Close()
+	cmd.Stdout = pdf
+	c.Assert(cmd.Run(), IsNil)
+
+	//fmt.Println(syscall.Exec("dot -Tpng decision.dot > decision.png", nil, nil))
+	//fmt.Println(syscall.Exec("open decision.png", nil, nil))
 
 	s.Tree = tree
 }
@@ -197,6 +204,104 @@ func (s *DecisionSuite) testEvaluate(c *C, context exp.Context, expected []strin
 
 	for _, object := range expected {
 		c.Assert(list, Contains, object)
+	}
+}
+
+func (s *DecisionSuite) Test_NextExpression1(c *C) {
+	expressions := []string{
+		`geo_code matches '^(.*,)?(US)$'`,
+		`platform = 'iOS'`,
+		`device.age_group != "13-17"`,
+	}
+
+	{
+		match, err := NewExpression(`platform = 'iOS'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`device.age_group != "13-17"`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+	}
+	{
+		first, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, nil)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, first.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		expression, expressions2, err := nextExpression([]string{}, nil)
+		c.Assert(err, IsNil)
+		c.Assert(expression, IsNil)
+		c.Assert(expressions2, HasLen, 0)
+	}
+}
+
+func (s *DecisionSuite) Test_NextExpression2(c *C) {
+	expressions := []string{
+		`geo_code matches '^(.*,)?(US)$'`,
+		`device.age_group != "13-17"`,
+	}
+
+	{
+		match, err := NewExpression(`platform = 'iOS'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression, IsNil)
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 1)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`device.age_group != "13-17"`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 1)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
 	}
 }
 

@@ -45,18 +45,27 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 }
 
 func addNode(node *Node, expressions []string, object string) (*Node, error) {
-	expression, err := NewExpression(expressions[0])
-	if err != nil {
-		return nil, err
-	}
+	var expression exp.Expression
+	var sliced []string
+	var err error
 
 	if node == nil {
+		expression, sliced, err = nextExpression(expressions, nil)
+		if err != nil {
+			return nil, err
+		}
 		node = NewNode(expression)
+
+	} else {
+		expression, sliced, err = nextExpression(expressions, node.Expression)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	if node.Expression.String() == expression.String() {
-		if len(expressions) > 1 {
-			node.True, err = addNode(node.True, expressions[1:], object)
+	if expression != nil { // There was a match
+		if len(sliced) > 0 {
+			node.True, err = addNode(node.True, sliced, object)
 			return node, err
 		}
 
@@ -66,6 +75,37 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 
 	node.False, err = addNode(node.False, expressions, object)
 	return node, err
+}
+
+func nextExpression(expressions []string, match exp.Expression) (exp.Expression, []string, error) {
+	if len(expressions) == 0 {
+		return nil, nil, nil
+	}
+
+	if match == nil {
+		// No match, use first
+		expression, err := NewExpression(expressions[0])
+		if err != nil {
+			return nil, nil, err
+		}
+		return expression, expressions[1:], nil
+	}
+
+	// See if the expression exists in the list
+	e := make([]string, 0, len(expressions))
+	for i, exprstr := range expressions {
+		expression, err := NewExpression(exprstr)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if expression.String() == match.String() {
+			return expression, append(e, expressions[i+1:]...), nil
+		}
+		e = append(e, exprstr)
+	}
+
+	return nil, expressions, nil
 }
 
 func (t Tree) Evaluate(ctx exp.Context, logger Logger) ([]string, error) {
@@ -96,7 +136,7 @@ func NewExpression(str string) (exp.Expression, error) {
 	p := parser.NewParser()
 	expression, err := p.Parse(lex)
 	if err != nil {
-		return nil, errors.Wrap(err, "Unable to build AST")
+		return nil, errors.Wrapf(err, "Unable to parse expression `%s`", str)
 	}
 
 	return expression.(exp.Expression), nil
