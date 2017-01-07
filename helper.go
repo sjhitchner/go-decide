@@ -6,53 +6,6 @@ import (
 	"sort"
 )
 
-type ExpressionPair struct {
-	Expression string
-	Count      int
-}
-
-type ExpressionPairList []ExpressionPair
-
-func (t ExpressionPair) String() string {
-	return fmt.Sprintf("%d: %s", t.Count, t.Expression)
-}
-
-func (t ExpressionPairList) Len() int {
-	return len(t)
-}
-
-func (t ExpressionPairList) Less(i, j int) bool {
-	return t[i].Count < t[j].Count
-}
-
-func (t ExpressionPairList) Swap(i, j int) {
-	t[i], t[j] = t[j], t[i]
-}
-
-func NewExpressionPairList(objects map[string][]string) ExpressionPairList {
-	expression := make(map[string]int)
-
-	for _, expressions := range objects {
-		for _, exp := range expressions {
-			expression[exp] += 1
-		}
-	}
-
-	return rankExpressionByFrequency(expression)
-}
-
-func rankExpressionByFrequency(expressionFrequencies map[string]int) ExpressionPairList {
-	el := make(ExpressionPairList, len(expressionFrequencies))
-
-	i := 0
-	for k, v := range expressionFrequencies {
-		el[i] = ExpressionPair{k, v}
-		i++
-	}
-	sort.Sort(sort.Reverse(el))
-	return el
-}
-
 // FrequencySorter
 // Sorts Frequency Lists not thread-safe
 type FrequencySorter struct {
@@ -69,6 +22,11 @@ func NewFrequencySorter() FrequencySorter {
 
 func (t FrequencySorter) Sort(list []string) {
 	t.list = list
+	sort.Sort(t)
+}
+
+func (t FrequencySorter) SortReverse(list []string) {
+	t.list = list
 	sort.Sort(sort.Reverse(t))
 }
 
@@ -77,12 +35,16 @@ func (t FrequencySorter) FrequencyList() []string {
 	for key, _ := range t.frequencies {
 		list = append(list, key)
 	}
-	t.Sort(list)
+	t.SortReverse(list)
 	return list
 }
 
 func (t FrequencySorter) AddToFrequencies(str string) {
 	t.frequencies[str]++
+}
+
+func (t FrequencySorter) AddValue(str string, count int) {
+	t.frequencies[str] = count
 }
 
 func (t FrequencySorter) Len() int {

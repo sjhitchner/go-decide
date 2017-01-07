@@ -4,8 +4,8 @@ import (
 	"fmt"
 	exp "github.com/sjhitchner/go-decide/expression"
 	. "gopkg.in/check.v1"
-	"math/rand"
 	"os"
+	//"os/exec"
 	"testing"
 )
 
@@ -13,7 +13,10 @@ func Test(t *testing.T) {
 	TestingT(t)
 }
 
-type DecisionSuite struct{}
+type DecisionSuite struct {
+	Objects map[string][]string
+	Tree    *Tree
+}
 
 var _ = Suite(&DecisionSuite{})
 
@@ -32,9 +35,8 @@ func (t *TestLogger) Appendf(f string, a ...interface{}) {
 	t.Trace = append(t.Trace, fmt.Sprintf(f, a...))
 }
 
-func (s *DecisionSuite) Test(c *C) {
-
-	objects := map[string][]string{
+func (s *DecisionSuite) SetUpSuite(c *C) {
+	s.Objects = map[string][]string{
 		"object01": []string{
 			`geo_code matches '^(.*,)?(US)$'`,
 		},
@@ -57,149 +59,292 @@ func (s *DecisionSuite) Test(c *C) {
 			`device.age_group != "13-17"`,
 			`geo_code matches '^(.*,)?(US)$'`,
 		},
+		"object07": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+			`platform = 'iOS'`,
+			`device.gender != "male"`,
+		},
 	}
 
-	tree, err := NewTree(objects)
-	if err != nil {
-		c.Fatal(err)
-	}
-
-	//fmt.Println(tree)
+	tree, err := NewTree(s.Objects)
+	c.Assert(err, IsNil)
 
 	f, err := os.Create("decision.dot")
-	if err != nil {
-		c.Fatal(err)
-	}
+	c.Assert(err, IsNil)
 	defer f.Close()
 	tree.Graph(f)
 
+	//cmd := exec.Command("dot", "-Tpdf", "decision.dot")
+	//pdf, err := os.Create("decision.pdf")
+	//c.Assert(err, IsNil)
+	//defer pdf.Close()
+	//cmd.Stdout = pdf
+	//c.Assert(cmd.Run(), IsNil)
+	//fmt.Println(syscall.Exec("open decision.png", nil, nil))
+
+	s.Tree = tree
+}
+
+func (s *DecisionSuite) Test_Context1(c *C) {
 	context := TestContext{
 		"geo_code":         "US",
 		"platform":         "iOS",
 		"device.age_group": "60",
 	}
 
-	logger := &TestLogger{
-		make([]string, 0, 10),
-	}
-
-	log, err := tree.Evaluate(context, logger)
-	if err != nil {
-		c.Fatal(err)
-	}
-
-	c.Assert(logger.Trace, HasLen, 4)
-
-	c.Log(log)
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+		"object07",
+	})
 }
 
-/*
-(device.device_type matches '(?i)(Phone)')
-(device.device_type matches '(?i)(Tablet)')
-((geo_code matches '^(.*,)?(GB)$'))
-(device.age_group != "13-17" and (geo_code matches '^(.*,)?(US)$'))
-(app.genre matches '^(Productivity)$')
-
-((geo_code matches '^(.*,)?(US)$'))
-((platform = 'iOS'))
-((platform = 'iOS') and (geo_code matches '^(.*,)?(US)$'))
-((platform = 'Android'))
-((platform = 'Android') and (geo_code matches '^(.*,)?(US)$'))
-(device.age_group != "13-17" and (geo_code matches '^(.*,)?(US)$'))
-
-*/
-
-/*
-((platform = 'Web Android' or platform = 'Android' or platform = 'Web Desktop') and (geo_code matches '^(.*,)?(FR)$'
-))
-((geo_code matches '^(.*,)?(CA)$'))
-((platform = 'iOS' or platform = 'Web Desktop' or platform = 'Web iOS') and (geo_code matches '^(.*,)?(FR)$'))
-((geo_code matches '^(.*,)?(HK)$'))
-((platform = 'Web Android' or platform = 'Android' or platform = 'Web Desktop'))
-((geo_code matches '^(.*,)?(02,AU|04,AU)$'))
-((platform = 'Android') and (geo_code matches '^(.*,)?(MX)$'))
-*/
-
-func (s DecisionSuite) TestFrequencySorter(c *C) {
-	toSort := []string{
-		`geo_code matches '^(.*,)?(US)$'`,
-		`platform = 'iOS'`,
-		`platform = 'iOS'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`platform = 'Android'`,
-		`platform = 'Android'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`device.age_group != "13-17"`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`device.device_type matches '(?i)(Phone)'`,
-		`device.device_type matches '(?i)(Phone)'`,
-		`device.device_type matches '(?i)(Tablet)'`,
-		`geo_code matches '^(.*,)?(GB)$'`,
-		`device.age_group != "13-17"`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`app.genre matches '^(Productivity)$'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`platform = 'iOS'`,
-		`platform = 'iOS'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`platform = 'Android'`,
-		`platform = 'Android'`,
-		`geo_code matches '^(.*,)?(US)$'`,
-		`device.age_group != "13-17"`,
-		`geo_code matches '^(.*,)?(US)$'`,
+func (s *DecisionSuite) Test_Context2(c *C) {
+	context := TestContext{
+		"geo_code":      "US",
+		"platform":      "iOS",
+		"device.gender": "male",
 	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+	})
+}
 
-	sorter := NewFrequencySorter()
-	for _, str := range toSort {
-		sorter.AddToFrequencies(str)
+func (s *DecisionSuite) Test_Context3(c *C) {
+	context := TestContext{
+		"geo_code":      "US",
+		"platform":      "iOS",
+		"device.gender": "female",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+		"object07",
+	})
+}
+
+func (s *DecisionSuite) Test_Context4(c *C) {
+	context := TestContext{
+		"geo_code": "US",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object06",
+	})
+}
+
+func (s *DecisionSuite) Test_Context5(c *C) {
+	context := TestContext{
+		"geo_code": "US",
+		"platform": "iOS",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+		"object07",
+	})
+}
+
+func (s *DecisionSuite) Test_Context6(c *C) {
+	context := TestContext{
+		"geo_code":      "US",
+		"platform":      "iOS",
+		"device.gender": "female",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object03",
+		"object07",
+	})
+}
+
+func (s *DecisionSuite) Test_Context7(c *C) {
+	context := TestContext{
+		"geo_code":         "US",
+		"platform":         "Android",
+		"device.age_group": "60",
+	}
+	s.testEvaluate(c, context, []string{
+		"object01",
+		"object05",
+		"object06",
+	})
+}
+
+func (s *DecisionSuite) Test_Context8(c *C) {
+	context := TestContext{
+		"geo_code": "CA",
+		"platform": "Android",
+	}
+	s.testEvaluate(c, context, []string{
+		"object04",
+	})
+}
+
+func (s *DecisionSuite) Test_Context9(c *C) {
+	context := TestContext{
+		"geo_code":      "CA",
+		"platform":      "iOS",
+		"device.gender": "female",
+	}
+	s.testEvaluate(c, context, []string{
+		"object02",
+	})
+}
+
+func (s *DecisionSuite) Test_Find(c *C) {
+	for object, expressions := range s.Objects {
+
+		path, found := s.Tree.Find(object)
+		c.Assert(found, Equals, true)
+
+		c.Assert(len(path), Equals, len(expressions))
+		for _, expstr := range expressions {
+			expression, err := NewExpression(expstr)
+			c.Assert(err, IsNil)
+			c.Assert(path, Contains, expression.String())
+		}
+	}
+}
+
+func (s *DecisionSuite) testEvaluate(c *C, context exp.Context, expected []string) {
+	logger := &TestLogger{make([]string, 0, 10)}
+
+	list, err := s.Tree.Evaluate(context, logger)
+	c.Assert(err, IsNil)
+
+	c.Assert(list, HasLen, len(expected))
+
+	for _, object := range expected {
+		c.Assert(list, Contains, object)
+	}
+}
+
+func (s *DecisionSuite) Test_NextExpression1(c *C) {
+	expressions := []string{
+		`geo_code matches '^(.*,)?(US)$'`,
+		`platform = 'iOS'`,
+		`device.age_group != "13-17"`,
 	}
 
 	{
-		// Test many sorted permatations
-		expected := []string{
-			`geo_code matches '^(.*,)?(US)$'`,
-			`platform = 'iOS'`,
-			`platform = 'Android'`,
-			`device.age_group != "13-17"`,
-			`device.device_type matches '(?i)(Phone)'`,
-			`geo_code matches '^(.*,)?(GB)$'`,
-			`device.device_type matches '(?i)(Tablet)'`,
-			`app.genre matches '^(Productivity)$'`,
-		}
-		for i := 0; i < 100; i++ {
-			var temp = make([]string, len(expected))
-			copy(temp, expected)
+		match, err := NewExpression(`platform = 'iOS'`)
+		c.Assert(err, IsNil)
 
-			//Randomize List
-			for i := range temp {
-				j := rand.Intn(i + 1)
-				temp[i], temp[j] = temp[j], temp[i]
-			}
-			sorter.Sort(temp)
-			c.Assert(temp, DeepEquals, expected)
-		}
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
 	}
 	{
-		// Test many sorted permatations
-		expected := []string{
-			`geo_code matches '^(.*,)?(US)$'`,
-			`platform = 'Android'`,
-			`device.device_type matches '(?i)(Phone)'`,
-			`app.genre matches '^(Productivity)$'`,
-		}
-		for i := 0; i < 100; i++ {
-			var temp = make([]string, len(expected))
-			copy(temp, expected)
+		match, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
 
-			//Randomize List
-			for i := range temp {
-				j := rand.Intn(i + 1)
-				temp[i], temp[j] = temp[j], temp[i]
-			}
-			sorter.Sort(temp)
-			c.Assert(temp, DeepEquals, expected)
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`device.age_group != "13-17"`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+	}
+	{
+		first, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, nil)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, first.String())
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `platform = 'iOS'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		expression, expressions2, err := nextExpression([]string{}, nil)
+		c.Assert(err, IsNil)
+		c.Assert(expression, IsNil)
+		c.Assert(expressions2, HasLen, 0)
+	}
+}
+
+func (s *DecisionSuite) Test_NextExpression2(c *C) {
+	expressions := []string{
+		`geo_code matches '^(.*,)?(US)$'`,
+		`device.age_group != "13-17"`,
+	}
+
+	{
+		match, err := NewExpression(`platform = 'iOS'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression, IsNil)
+		c.Assert(expressions2, HasLen, 2)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`geo_code matches '^(.*,)?(US)$'`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 1)
+		c.Assert(expressions2, Contains, `device.age_group != "13-17"`)
+	}
+	{
+		match, err := NewExpression(`device.age_group != "13-17"`)
+		c.Assert(err, IsNil)
+
+		expression, expressions2, err := nextExpression(expressions, match)
+		c.Assert(err, IsNil)
+		c.Assert(expression.String(), Equals, match.String())
+		c.Assert(expressions2, HasLen, 1)
+		c.Assert(expressions2, Contains, `geo_code matches '^(.*,)?(US)$'`)
+	}
+}
+
+type containsChecker struct {
+	*CheckerInfo
+}
+
+var Contains Checker = &containsChecker{
+	&CheckerInfo{Name: "Contains", Params: []string{"obtained", "expected"}},
+}
+
+func (checker *containsChecker) Check(params []interface{}, names []string) (result bool, error string) {
+	defer func() {
+		if v := recover(); v != nil {
+			result = false
+			error = fmt.Sprint(v)
+		}
+	}()
+
+	return stringInSlice(params[1].(string), params[0].([]string)), ""
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
 		}
 	}
+	return false
 }
 
 func (s *DecisionSuite) TestLogicalOrEvaluation(c *C) {
