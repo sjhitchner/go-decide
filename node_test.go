@@ -5,7 +5,7 @@ import (
 	exp "github.com/sjhitchner/go-decide/expression"
 	. "gopkg.in/check.v1"
 	"os"
-	"os/exec"
+	//"os/exec"
 	"testing"
 )
 
@@ -74,14 +74,12 @@ func (s *DecisionSuite) SetUpSuite(c *C) {
 	defer f.Close()
 	tree.Graph(f)
 
-	cmd := exec.Command("dot", "-Tpdf", "decision.dot")
-	pdf, err := os.Create("decision.pdf")
-	c.Assert(err, IsNil)
-	defer pdf.Close()
-	cmd.Stdout = pdf
-	c.Assert(cmd.Run(), IsNil)
-
-	//fmt.Println(syscall.Exec("dot -Tpng decision.dot > decision.png", nil, nil))
+	//cmd := exec.Command("dot", "-Tpdf", "decision.dot")
+	//pdf, err := os.Create("decision.pdf")
+	//c.Assert(err, IsNil)
+	//defer pdf.Close()
+	//cmd.Stdout = pdf
+	//c.Assert(cmd.Run(), IsNil)
 	//fmt.Println(syscall.Exec("open decision.png", nil, nil))
 
 	s.Tree = tree
