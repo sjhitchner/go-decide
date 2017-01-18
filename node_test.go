@@ -92,7 +92,7 @@ func (s *DecisionSuite) Test_Context1(c *C) {
 		"device.age_group": "60",
 	}
 
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object03",
 		"object07",
@@ -105,7 +105,7 @@ func (s *DecisionSuite) Test_Context2(c *C) {
 		"platform":      "iOS",
 		"device.gender": "male",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object03",
 	})
@@ -117,7 +117,7 @@ func (s *DecisionSuite) Test_Context3(c *C) {
 		"platform":      "iOS",
 		"device.gender": "female",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object03",
 		"object07",
@@ -128,7 +128,7 @@ func (s *DecisionSuite) Test_Context4(c *C) {
 	context := TestContext{
 		"geo_code": "US",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object06",
 	})
@@ -139,7 +139,7 @@ func (s *DecisionSuite) Test_Context5(c *C) {
 		"geo_code": "US",
 		"platform": "iOS",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object03",
 		"object07",
@@ -152,7 +152,7 @@ func (s *DecisionSuite) Test_Context6(c *C) {
 		"platform":      "iOS",
 		"device.gender": "female",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object03",
 		"object07",
@@ -165,7 +165,7 @@ func (s *DecisionSuite) Test_Context7(c *C) {
 		"platform":         "Android",
 		"device.age_group": "60",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object01",
 		"object05",
 		"object06",
@@ -177,7 +177,7 @@ func (s *DecisionSuite) Test_Context8(c *C) {
 		"geo_code": "CA",
 		"platform": "Android",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object04",
 	})
 }
@@ -188,11 +188,134 @@ func (s *DecisionSuite) Test_Context9(c *C) {
 		"platform":      "iOS",
 		"device.gender": "female",
 	}
-	s.testEvaluate(c, context, []string{
+	testEvaluate(c, s.Tree, context, []string{
 		"object02",
 	})
 }
 
+func (s *DecisionSuite) Test_Ages(c *C) {
+	s.Objects = map[string][]string{
+		"object01": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object02": []string{
+			`platform = 'iOS'`,
+		},
+		"object03": []string{
+			`platform = 'iOS'`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object04": []string{
+			`platform = 'Android'`,
+		},
+		"object05": []string{
+			`platform = 'Android'`,
+			`device.age_group = "50"`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object06": []string{
+			`device.age_group = "13-17"`,
+			`geo_code matches '^(.*,)?(US)$'`,
+		},
+		"object07": []string{
+			`geo_code matches '^(.*,)?(US)$'`,
+			`platform = 'iOS'`,
+		},
+	}
+
+	tree, err := NewTree(s.Objects)
+	c.Assert(err, IsNil)
+
+	f, err := os.Create("decision-ages.dot")
+	c.Assert(err, IsNil)
+	defer f.Close()
+	tree.Graph(f)
+
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"geo_code": "US",
+		}, []string{
+			"object01",
+		})
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"geo_code":         "US",
+			"device.age_group": "13-17",
+		}, []string{
+			"object01",
+			"object06",
+		})
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"geo_code":         "US",
+			"device.age_group": "18-34",
+		}, []string{
+			"object01",
+		})
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"geo_code":         "US",
+			"device.age_group": "35-49",
+		}, []string{
+			"object01",
+		})
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"geo_code":         "US",
+			"device.age_group": "50",
+		}, []string{
+			"object01",
+		})
+
+}
+
+func (s *DecisionSuite) Test_NotEquals(c *C) {
+	objects := map[string][]string{
+		"object01": []string{
+			"app != 'A'",
+		},
+	}
+
+	tree, err := NewTree(objects)
+	c.Assert(err, IsNil)
+
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"app": "A",
+		}, []string{})
+
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"app": "B",
+		}, []string{
+			"object01",
+		})
+
+	testEvaluate(
+		c,
+		tree,
+		TestContext{
+			"country": "US",
+		}, []string{
+			"object01",
+		})
+}
+
+/*
 func (s *DecisionSuite) Test_Find(c *C) {
 	for object, expressions := range s.Objects {
 
@@ -207,17 +330,90 @@ func (s *DecisionSuite) Test_Find(c *C) {
 		}
 	}
 }
+*/
 
-func (s *DecisionSuite) testEvaluate(c *C, context exp.Context, expected []string) {
+func testEvaluate(c *C, tree *Tree, context exp.Context, expected []string) {
 	logger := &TestLogger{make([]string, 0, 10)}
 
-	list, err := s.Tree.Evaluate(context, logger)
+	list, err := tree.Evaluate(context, logger)
 	c.Assert(err, IsNil)
 
 	c.Assert(list, HasLen, len(expected))
 
 	for _, object := range expected {
 		c.Assert(list, Contains, object)
+	}
+}
+
+func (s *DecisionSuite) Test_Matches(c *C) {
+	exp, err := NewExpression(`test matches '^(hello|world)$'`)
+	c.Assert(err, IsNil)
+
+	{
+		ctx := TestContext{}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, false)
+	}
+	{
+		ctx := TestContext{
+			"test": "qwerty",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, false)
+	}
+	{
+		ctx := TestContext{
+			"test": "hello",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, true)
+	}
+	{
+		ctx := TestContext{
+			"test": "world",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, true)
+	}
+}
+
+func (s *DecisionSuite) Test_NotMatches(c *C) {
+	exp, err := NewExpression(`not test matches '^(hello|world)$'`)
+	c.Assert(err, IsNil)
+
+	{
+		ctx := TestContext{}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, true)
+	}
+	{
+		ctx := TestContext{
+			"test": "qwerty",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, true)
+	}
+	{
+		ctx := TestContext{
+			"test": "hello",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, false)
+	}
+	{
+		ctx := TestContext{
+			"test": "world",
+		}
+		result, err := exp.Evaluate(ctx)
+		c.Assert(err, IsNil)
+		c.Assert(result, Equals, false)
 	}
 }
 
