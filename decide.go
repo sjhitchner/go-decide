@@ -74,7 +74,7 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 	}
 
 	// If there is no matching expression, but the expression is a negative (NOT) expression
-	// the expressions are independent and the asset should be present whether or this check
+	// the expressions are independent and the object should be present whether or this check
 	// is true or false
 	// Ex: no matching app.Id != "A" expression, but the request could match the expression and still be valid for the rest of the expressions
 	switch nodeExp := node.Expression.(type) {
