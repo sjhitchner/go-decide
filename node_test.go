@@ -6,6 +6,7 @@ import (
 	. "gopkg.in/check.v1"
 	"os"
 	//"os/exec"
+	"strings"
 	"testing"
 )
 
@@ -224,6 +225,11 @@ func (s *DecisionSuite) Test_Find(c *C) {
 			expression, err := NewExpression(expstr)
 			c.Assert(err, IsNil)
 			c.Assert(path, Contains, expression.String())
+		}
+
+		for _, notStr := range notMatch {
+			check := strings.Contains(notStr, "!=") || strings.Contains(notStr, "NOT")
+			c.Assert(check, Equals, true)
 		}
 	}
 }
