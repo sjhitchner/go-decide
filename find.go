@@ -40,8 +40,12 @@ func (t Node) Find(depth int, path *stack, object string) bool {
 		return true
 	}
 
-	if t.True != nil && t.True.Find(depth+1, path, object) {
-		return true
+	if len(t.True) > 0 {
+		for _, trueNode := range t.True {
+			if trueNode.Find(depth+1, path, object) {
+				return true
+			}
+		}
 	}
 
 	path.Pop()

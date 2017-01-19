@@ -63,6 +63,7 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 		}
 	}
 
+	/* Old logic
 	if expression != nil { // There was a match
 		if len(sliced) > 0 {
 			node.True, err = addNode(node.True, sliced, object)
@@ -88,6 +89,29 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 
 	if err != nil {
 		return node, err
+	}
+	*/
+
+	if expression != nil { // There was a match
+		if len(sliced) > 0 {
+			if len(node.True) > 0 {
+				for i, nodeTrue := range node.True {
+					exp, _, _ := nextExpression(sliced, nodeTrue.Expression)
+					if exp != nil { // One of the true nodes matches something left
+						node.True[i], err = addNode(node.True[i], sliced, object)
+						return node, err
+					}
+				}
+			}
+
+			// None of the True sets matched
+			node.True = append(node.True, nil)
+			node.True[len(node.True)-1], err = addNode(node.True[len(node.True)-1], sliced, object)
+			return node, err
+		}
+
+		node.Payload = append((*node).Payload, object)
+		return node, nil
 	}
 
 	node.False, err = addNode(node.False, expressions, object)
