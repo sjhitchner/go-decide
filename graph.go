@@ -16,9 +16,10 @@ func Graph(w io.Writer, node *Node) error {
 }
 
 func GraphWalk(graph *graphviz.Graph, parent *Node, nodes []*Node) {
-	for _, node := range nodes {
+	for i := 0; i < len(nodes); i++ {
+		node := nodes[i]
 		graph.AddNode(
-			fmt.Sprintf("Node%p", nodes),
+			fmt.Sprintf("Node%p", node),
 			map[string]string{
 				//"label": node.Expression.String(),
 				"label": fmt.Sprintf(
