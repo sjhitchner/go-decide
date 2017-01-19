@@ -13,7 +13,7 @@ import (
 type Node struct {
 	Expression exp.Expression
 	Payload    []string
-	True       *Node
+	True       []*Node
 	False      *Node
 }
 
@@ -40,8 +40,14 @@ func (t Node) Evaluate(ctx exp.Context, payloadMap map[string]struct{}, trace Lo
 
 	trace.Appendf("EVAL %s %v", t.Expression, t.Payload)
 
-	if result && t.True != nil {
-		return t.True.Evaluate(ctx, payloadMap, trace)
+	if result && len(t.True) > 0 {
+		for _, trueNode := range t.True {
+			err := trueNode.Evaluate(ctx, payloadMap, trace)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
 
 	} else if t.False != nil {
 		return t.False.Evaluate(ctx, payloadMap, trace)

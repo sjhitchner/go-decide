@@ -96,6 +96,7 @@ func (s *DecisionSuite) Test_Context1(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object06",
 		"object07",
 	})
 }
@@ -109,6 +110,7 @@ func (s *DecisionSuite) Test_Context2(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object06",
 	})
 }
 
@@ -121,6 +123,7 @@ func (s *DecisionSuite) Test_Context3(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object06",
 		"object07",
 	})
 }
@@ -143,6 +146,7 @@ func (s *DecisionSuite) Test_Context5(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object01",
 		"object03",
+		"object06",
 		"object07",
 	})
 }
@@ -150,13 +154,13 @@ func (s *DecisionSuite) Test_Context5(c *C) {
 func (s *DecisionSuite) Test_Context6(c *C) {
 	context := TestContext{
 		"geo_code":      "US",
-		"platform":      "iOS",
+		"platform":      "Android",
 		"device.gender": "female",
 	}
 	s.testEvaluate(c, context, []string{
 		"object01",
-		"object03",
-		"object07",
+		"object05",
+		"object06",
 	})
 }
 
@@ -192,6 +196,14 @@ func (s *DecisionSuite) Test_Context9(c *C) {
 	s.testEvaluate(c, context, []string{
 		"object02",
 	})
+}
+
+func (s *DecisionSuite) Test_Context10(c *C) {
+	context := TestContext{
+		"platform":      "iOS",
+		"device.gender": "male",
+	}
+	s.testEvaluate(c, context, []string{})
 }
 
 func (s *DecisionSuite) Test_Find(c *C) {
