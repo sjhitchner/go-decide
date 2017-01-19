@@ -15,7 +15,7 @@ func Graph(w io.Writer, node *Node) error {
 	return graph.Output(w)
 }
 
-func GraphWalk(graph *graphviz.Graph, parent, nodes []*Node) {
+func GraphWalk(graph *graphviz.Graph, parent *Node, nodes []*Node) {
 	for _, node := range nodes {
 		graph.AddNode(
 			fmt.Sprintf("Node%p", nodes),
