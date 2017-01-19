@@ -199,7 +199,27 @@ func (s *DecisionSuite) Test_Find(c *C) {
 		path, found := s.Tree.Find(object)
 		c.Assert(found, Equals, true)
 
-		c.Assert(len(path), Equals, len(expressions))
+		pathMatch := []string{}
+		notMatch := []string{}
+		for _, pathStr := range path {
+			matched := false
+			for _, expStr := range expressions {
+				exp, err := NewExpression(expStr)
+				c.Assert(err, IsNil)
+				if pathStr == exp.String() {
+					pathMatch = append(pathMatch, pathStr)
+					matched = true
+				}
+			}
+
+			if !matched {
+				notMatch = append(notMatch, pathStr)
+			}
+		}
+
+		c.Assert(len(pathMatch), Equals, len(expressions))
+		c.Assert(len(pathMatch)+len(notMatch), Equals, len(path))
+
 		for _, expstr := range expressions {
 			expression, err := NewExpression(expstr)
 			c.Assert(err, IsNil)
