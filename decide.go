@@ -149,9 +149,9 @@ func nextExpression(expressions []string, match exp.Expression) (exp.Expression,
 	return nil, expressions, nil
 }
 
-func (t Tree) Evaluate(ctx exp.Context, logger Logger) ([]string, error) {
+func (t Tree) Evaluate(ctx exp.Context, trace Logger) ([]string, error) {
 	payloadMap := make(map[string]struct{})
-	if err := t.root.Evaluate(ctx, payloadMap, logger); err != nil {
+	if err := t.root.Evaluate(ctx, payloadMap, trace); err != nil {
 		return nil, errors.Wrap(err, "Error evaluating tree")
 	}
 
