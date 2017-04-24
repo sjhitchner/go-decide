@@ -114,6 +114,25 @@ func addNode(node *Node, expressions []string, object string) (*Node, error) {
 		return node, nil
 	}
 
+	// If there is no matching expression, but the expression is a negative (NOT) expression
+	// the expressions are independent and the object should be present whether or this check
+	// is true or false
+	// Ex: no matching app.Id != "A" expression, but the request could match the expression and still be valid for the rest of the expressions
+	switch nodeExp := node.Expression.(type) {
+	case *exp.ComparisonExpression:
+		if nodeExp.Comparison == exp.NotEquals || nodeExp.Comparison == exp.IsNot {
+			node.True = append(node.True, nil)
+			node.True[len(node.True)-1], err = addNode(node.True[len(node.True)-1], sliced, object)
+		}
+	case *exp.NegationExpression:
+		node.True = append(node.True, nil)
+		node.True[len(node.True)-1], err = addNode(node.True[len(node.True)-1], sliced, object)
+	}
+
+	if err != nil {
+		return node, err
+	}
+
 	node.False, err = addNode(node.False, expressions, object)
 	return node, err
 }
