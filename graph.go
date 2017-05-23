@@ -10,7 +10,7 @@ import (
 
 // Generate a Graphviz representation of the node tree
 func Graph(w io.Writer, node *Node) error {
-	graph := graphviz.NewGraph("DecisisonTree")
+	graph := graphviz.NewGraph("DecisionTree")
 	GraphWalk(graph, nil, []*Node{node})
 	return graph.Output(w)
 }
