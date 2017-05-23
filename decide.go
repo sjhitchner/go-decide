@@ -183,11 +183,21 @@ func (t Tree) Evaluate(ctx exp.Context, trace Logger) ([]string, error) {
 }
 
 func (t Tree) String() string {
+	if t.Empty() {
+		return ""
+	}
 	return t.root.String()
 }
 
 func (t Tree) Graph(w io.Writer) error {
+	if t.Empty() {
+		return errors.New("Cannot graph empty tree")
+	}
 	return Graph(w, t.root)
+}
+
+func (t Tree) Empty() bool {
+	return t.root == nil
 }
 
 func NewExpression(str string) (exp.Expression, error) {
