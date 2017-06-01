@@ -19,18 +19,29 @@ type Tree struct {
 func NewTree(objects, priority map[string][]string) (*Tree, error) {
 	objectSorter := NewFrequencySorter()
 	expressionSorter := NewFrequencySorter()
+	prioritySorter := NewFrequencySorter()
 
 	// Build up frequency tables
 	for object, list := range objects {
 		for _, expString := range list {
 			expressionSorter.AddToFrequencies(expString)
 		}
+
+		// Do a sort on the objects with priority expressions first
+		if _, ok := priority[object]; ok {
+			prioritySorter.AddValue(object, len(list)+len(priority[object]))
+			continue
+		}
+
+		// Do not need to sort objects that do not have priority expressions if they are already in the priority sort
 		objectSorter.AddValue(object, len(list))
 	}
 
 	var root *Node
 	var err error
-	for _, object := range objectSorter.FrequencyList() {
+
+	// Add the nodes with the priority expressions (which are sorted by length of expressions) first
+	for _, object := range prioritySorter.FrequencyList() {
 		expressions := objects[object]
 		expressionSorter.SortReverse(expressions)
 
@@ -38,6 +49,17 @@ func NewTree(objects, priority map[string][]string) (*Tree, error) {
 		if _, ok := priority[object]; ok {
 			expressions = append(priority[object], expressions...)
 		}
+
+		root, err = addNode(root, expressions, object)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	// Add the rest of the nodes
+	for _, object := range objectSorter.FrequencyList() {
+		expressions := objects[object]
+		expressionSorter.SortReverse(expressions)
 
 		root, err = addNode(root, expressions, object)
 		if err != nil {
