@@ -16,7 +16,7 @@ type Tree struct {
 	root *Node
 }
 
-func NewTree(objects map[string][]string) (*Tree, error) {
+func NewTree(objects, priority map[string][]string) (*Tree, error) {
 
 	objectSorter := NewFrequencySorter()
 	expressionSorter := NewFrequencySorter()
@@ -34,6 +34,9 @@ func NewTree(objects map[string][]string) (*Tree, error) {
 	for _, object := range objectSorter.FrequencyList() {
 		expressions := objects[object]
 		expressionSorter.SortReverse(expressions)
+
+		// prepend the expressions with the priority values so they are built first
+		expressions = append(priority[object], expressions...)
 
 		root, err = addNode(root, expressions, object)
 		if err != nil {
