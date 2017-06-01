@@ -67,7 +67,10 @@ func (s *DecisionSuite) SetUpSuite(c *C) {
 		},
 	}
 
-	tree, err := NewTree(s.Objects)
+	// Give an empty priority list since we are testing pure frequencies here
+	priority := make(map[string][]string)
+
+	tree, err := NewTree(s.Objects, priority)
 	c.Assert(err, IsNil)
 
 	f, err := os.Create("decision.dot")
