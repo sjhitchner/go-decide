@@ -28,7 +28,7 @@ func NewTree(objects, priority map[string][]string) (*Tree, error) {
 		}
 
 		// Do a sort on the objects with priority expressions first
-		if _, ok := priority[object]; ok {
+		if _, ok := priority[object]; ok && len(priority[object]) > 0 {
 			prioritySorter.AddValue(object, len(list)+len(priority[object]))
 			continue
 		}
@@ -46,9 +46,7 @@ func NewTree(objects, priority map[string][]string) (*Tree, error) {
 		expressionSorter.SortReverse(expressions)
 
 		// prepend the expressions with the priority values so they are built first
-		if _, ok := priority[object]; ok {
-			expressions = append(priority[object], expressions...)
-		}
+		expressions = append(priority[object], expressions...)
 
 		root, err = addNode(root, expressions, object)
 		if err != nil {
