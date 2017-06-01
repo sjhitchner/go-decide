@@ -26,6 +26,13 @@ func NewTree(objects, priority map[string][]string) (*Tree, error) {
 	for object, list := range objects {
 		var priorityInList bool
 		for _, expString := range list {
+			if priorityList, ok := priority[object]; ok {
+				for _, priorityExp := range priorityList {
+					if priorityExp == expString {
+						priorityInList = true
+					}
+				}
+			}
 			expressionSorter.AddToFrequencies(expString)
 		}
 
@@ -45,7 +52,6 @@ func NewTree(objects, priority map[string][]string) (*Tree, error) {
 	// Add the nodes with the priority expressions (which are sorted) first
 	for _, object := range prioritySorter.FrequencyList() {
 		expressions := objects[object]
-		priorityExpresions := priority[object]
 		expressionSorter.SortReverse(expressions)
 
 		// prepend the expressions with the priority values so they are built first
